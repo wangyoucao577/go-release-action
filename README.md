@@ -41,8 +41,8 @@ jobs:
 | github_token | **Mandatory** | Your `GITHUB_TOKEN` for uploading releases to Github asserts. |
 | goos | **Mandatory** | `GOOS` is the running program's operating system target: one of `darwin`, `freebsd`, `linux`, and so on. |
 | goarch | **Mandatory** | `GOARCH` is the running program's architecture target: one of `386`, `amd64`, `arm`, `s390x`, and so on. |
-| project_path | **Optional** | Where to run `go build`. `.` by default. |
-| binary_name | **Optional** | Specify another binary name if do not want to use repository basename. Use your repository's basename if not set. |
+| project_path | **Optional** | Where to run `go build`. <br>Use `.` by default. |
+| binary_name | **Optional** | Specify another binary name if do not want to use repository basename. <br>Use your repository's basename if not set. |
 
 ### Advanced Example
 
