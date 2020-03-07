@@ -8,7 +8,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - Support multiple binaries in same repository.    
 - Customizable binary name.     
 - Support multiple `GOOS`/`GOARCH` build in parallel by [Github Action Matrix Strategy](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategymatrix) gracefully.         
-- Support compress assets by `.tar.gz` or `.zip`.     
+- Publish `.zip` instead of `.tar.gz` for `windows`.     
 
 ## Usage
 
@@ -44,7 +44,6 @@ jobs:
 | goarch | **Mandatory** | `GOARCH` is the running program's architecture target: one of `386`, `amd64`, `arm`, `s390x`, and so on. |
 | project_path | **Optional** | Where to run `go build`. <br>Use `.` by default. |
 | binary_name | **Optional** | Specify another binary name if do not want to use repository basename. <br>Use your repository's basename if not set. |
-| compression | **Optional** | How to compress and package binaries. <br>Use `.tar.gz` by default, alternatively `.zip`. |
 
 ### Advanced Example
 

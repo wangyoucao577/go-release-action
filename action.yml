@@ -23,10 +23,6 @@ inputs:
     description: 'Specify another binary name if do not want to use repository basename'
     required: false
     default: ''
-  compression:
-    description: 'How to compress and package binaries'
-    required: false
-    default: '.tar.gz'
 runs:
   using: 'docker'
   image: 'Dockerfile'

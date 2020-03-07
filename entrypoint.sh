@@ -24,9 +24,9 @@ go build -o "${BINARY_NAME}${EXT}"
 ls -lh
 
 
-# tar binary and calculate checksum
+# compress and package binary, then calculate checksum
 RELEASE_ASSET_EXT='.tar.gz'
-if [ ${INPUT_COMPRESSION} == '.zip' || ${INPUT_COMPRESSION} == 'zip' ]; then
+if [ ${INPUT_GOOS} == 'windows' ]; then
 RELEASE_ASSET_EXT='.zip'
 zip -v ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} "${BINARY_NAME}${EXT}"
 else
