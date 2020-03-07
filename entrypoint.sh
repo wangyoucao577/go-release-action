@@ -2,23 +2,17 @@
 
 set -eux
 
-# prepare binary name
+# prepare binary/release name
 BINARY_NAME=$(basename ${GITHUB_REPOSITORY})
 if [ x${INPUT_BINARY_NAME} != x ]; then
   BINARY_NAME=${INPUT_BINARY_NAME}
 fi
-
-# prepare URL and name to upload assets
-GITHUB_EVENT_DATA=$(cat ${GITHUB_EVENT_PATH})
-echo ${GITHUB_EVENT_DATA} | jq .
-RELEASE_ASSETS_UPLOAD_URL=$(echo ${GITHUB_EVENT_DATA} | jq -r .release.upload_url)
-echo ${RELEASE_ASSETS_UPLOAD_URL}
-RELEASE_ASSETS_UPLOAD_URL=${RELEASE_ASSETS_UPLOAD_URL/\{?name,label\}/}
-echo ${RELEASE_ASSETS_UPLOAD_URL}
-RELEASE_TAG=$(echo $GITHUB_EVENT_DATA | jq -r .release.tag_name)
-echo ${RELEASE_TAG}
+RELEASE_TAG=$(basename ${GITHUB_REF})
 RELEASE_ASSET_NAME=${BINARY_NAME}_${RELEASE_TAG}_${GOOS}_${GOARCH}
-echo ${RELEASE_ASSET_NAME}
+
+# prepare upload URL
+RELEASE_ASSETS_UPLOAD_URL=$(cat ${GITHUB_EVENT_PATH} | jq -r .release.upload_url)
+RELEASE_ASSETS_UPLOAD_URL=${RELEASE_ASSETS_UPLOAD_URL/\{?name,label\}/}
 
 # build binary
 cd ${INPUT_PROJECT_PATH}
@@ -43,7 +37,7 @@ curl \
 
 curl \
   -X POST \
-  --data $CHECKSUM \
+  --data ${CHECKSUM} \
   -H 'Content-Type: text/plain' \
   -H "Authorization: Bearer ${GITHUB_TOKEN}" \
   "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}_checksum.txt"
