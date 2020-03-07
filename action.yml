@@ -32,3 +32,6 @@ runs:
     - ${{ inputs.goarch }}
     - ${{ inputs.project_path }}
     - ${{ inputs.binary_name }}
+branding:
+  icon: 'package'  
+  color: 'blue'
