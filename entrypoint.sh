@@ -20,7 +20,7 @@ EXT=''
 if [ ${INPUT_GOOS} == 'windows' ]; then
   EXT='.exe'
 fi
-go build -o "${BINARY_NAME}${EXT}"
+GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} go build -o "${BINARY_NAME}${EXT}"
 ls -lh
 
 
