@@ -23,6 +23,10 @@ inputs:
     description: 'Specify another binary name if do not want to use repository basename'
     required: false
     default: ''
+  compression:
+    description: 'How to compress and package binaries'
+    required: false
+    default: '.tar.gz'
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -32,6 +36,7 @@ runs:
     - ${{ inputs.goarch }}
     - ${{ inputs.project_path }}
     - ${{ inputs.binary_name }}
+    - ${{ inputs.compression }}
 branding:
   icon: 'package'  
   color: 'blue'
