@@ -1,12 +1,7 @@
 
-ARG GOLANG_IMAGE_TAG=1.14-stretch
-FROM golang:${GOLANG_IMAGE_TAG}
+FROM golang:1.14-alpine
 
-RUN if [ -x "$(command -v apk)" ]; then \
-  apk add --no-cache curl jq git build-base \
-  ;elif [ -x "$(command -v apt-get)" ]; then \
-  apt-get install -y curl jq git \
-  ;fi
+RUN apk add --no-cache curl jq git build-base 
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
