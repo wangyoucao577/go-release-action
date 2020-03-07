@@ -16,14 +16,14 @@ RELEASE_ASSETS_UPLOAD_URL=${RELEASE_ASSETS_UPLOAD_URL/\{?name,label\}/}
 
 # build binary
 cd ${INPUT_PROJECT_PATH}
-go build -o "${BINARY_NAME}"
-
-
-# tar binary and calculate checksum
 EXT=''
 if [ $GOOS == 'windows' ]; then
   EXT='.exe'
 fi
+go build -o "${BINARY_NAME}${EXT}"
+
+
+# tar binary and calculate checksum
 tar cvfz tmp.tar.gz "${BINARY_NAME}${EXT}"
 CHECKSUM=$(md5sum tmp.tar.gz | cut -d ' ' -f 1)
 
