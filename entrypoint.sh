@@ -25,22 +25,23 @@ ls -lh
 
 
 # tar binary and calculate checksum
-tar cvfz tmp.tar.gz "${BINARY_NAME}${EXT}"
-CHECKSUM=$(md5sum tmp.tar.gz | cut -d ' ' -f 1)
+TAR_GZ_EXT='.tar.gz'
+tar cvfz ${RELEASE_ASSET_NAME}${TAR_GZ_EXT} "${BINARY_NAME}${EXT}"
+MD5_SUM=$(md5sum ${RELEASE_ASSET_NAME}${TAR_GZ_EXT} | cut -d ' ' -f 1)
 
 # update binary and checksum
 curl \
   -X POST \
-  --data-binary @tmp.tar.gz \
+  --data-binary @${RELEASE_ASSET_NAME}${TAR_GZ_EXT} \
   -H 'Content-Type: application/gzip' \
   -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-  "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}.tar.gz"
+  "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}${TAR_GZ_EXT}"
 echo $?
 
 curl \
   -X POST \
-  --data ${CHECKSUM} \
+  --data ${MD5_SUM} \
   -H 'Content-Type: text/plain' \
   -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-  "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}_checksum.txt"
+  "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}${TAR_GZ_EXT}.md5"
 echo $?
