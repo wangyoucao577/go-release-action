@@ -1,0 +1,18 @@
+# action.yml
+name: 'Go Release'
+description: 'Release Go binaries to Github Assets'
+inputs:
+  project_path:
+    description: 'Where to run `go build .`'
+    required: false
+    default: '.'
+  binary_name:  
+    description: 'Specify another binary name if do not want to use repository basename'
+    required: false
+    default: ''
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.project_path }}
+    - ${{ inputs.binary_name }}
