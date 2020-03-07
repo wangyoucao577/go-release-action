@@ -34,6 +34,7 @@ curl \
   -H 'Content-Type: application/gzip' \
   -H "Authorization: Bearer ${GITHUB_TOKEN}" \
   "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}.tar.gz"
+echo $?
 
 curl \
   -X POST \
@@ -41,3 +42,4 @@ curl \
   -H 'Content-Type: text/plain' \
   -H "Authorization: Bearer ${GITHUB_TOKEN}" \
   "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}_checksum.txt"
+echo $?
