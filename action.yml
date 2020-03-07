@@ -3,6 +3,18 @@ name: 'Go Release'
 author: 'Jay Zhang <wangyoucao577@gmail.com>'
 description: 'Release Go binaries to Github Assets'
 inputs:
+  github_token:
+    description: 'GITHUB_TOKEN for uploading releases to Github asserts.'
+    required: true
+    default: ''
+  goos:
+    description: 'GOOS is the running programs operating system target: one of darwin, freebsd, linux, and so on.'
+    required: true
+    default: ''
+  goarch:
+    description: 'GOARCH is the running programs architecture target: one of 386, amd64, arm, s390x, and so on.'
+    required: true
+    default: ''
   project_path:
     description: 'Where to run `go build .`'
     required: false
@@ -15,5 +27,8 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
+    - ${{ inputs.github_token }}
+    - ${{ inputs.goos }}
+    - ${{ inputs.goarch }}
     - ${{ inputs.project_path }}
     - ${{ inputs.binary_name }}
