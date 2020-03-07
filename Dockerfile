@@ -2,11 +2,10 @@
 ARG GOLANG_IMAGE_TAG=1.14-alpine
 FROM golang:${GOLANG_IMAGE_TAG}
 
-RUN /bin/bash -c 'if [ ${GOLANG_IMAGE_TAG} == *alpine* ]; then \
-    apk add --no-cache curl jq git build-base \
-    ;else \
-    apt-get install -y  curl jq git \
-    ;fi'
+RUN case "${GOLANG_IMAGE_TAG}" in \
+    *alpine*) apk add --no-cache curl jq git build-base ;; \
+    *) apt-get install -y  curl jq git ;; \
+    esac
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
