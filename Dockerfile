@@ -1,5 +1,5 @@
 
-ARG GOLANG_IMAGE_TAG=1.14-alpine
+ARG GOLANG_IMAGE_TAG=1.14-stretch
 FROM golang:${GOLANG_IMAGE_TAG}
 
 RUN if [ -x "$(command -v apk)" ]; then \
