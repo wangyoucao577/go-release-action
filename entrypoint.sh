@@ -21,6 +21,7 @@ if [ $GOOS == 'windows' ]; then
   EXT='.exe'
 fi
 go build -o "${BINARY_NAME}${EXT}"
+ls -lh
 
 
 # tar binary and calculate checksum
