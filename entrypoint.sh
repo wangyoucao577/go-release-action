@@ -31,6 +31,7 @@ MD5_SUM=$(md5sum ${RELEASE_ASSET_NAME}${TAR_GZ_EXT} | cut -d ' ' -f 1)
 
 # update binary and checksum
 curl \
+  --fail \
   -X POST \
   --data-binary @${RELEASE_ASSET_NAME}${TAR_GZ_EXT} \
   -H 'Content-Type: application/gzip' \
@@ -39,6 +40,7 @@ curl \
 echo $?
 
 curl \
+  --fail \
   -X POST \
   --data ${MD5_SUM} \
   -H 'Content-Type: text/plain' \
