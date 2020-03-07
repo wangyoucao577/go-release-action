@@ -36,7 +36,7 @@ CHECKSUM=$(md5sum tmp.tar.gz | cut -d ' ' -f 1)
 # update binary and checksum
 curl \
   -X POST \
-  --data-binary @tmp.tgz \
+  --data-binary @tmp.tar.gz \
   -H 'Content-Type: application/gzip' \
   -H "Authorization: Bearer ${GITHUB_TOKEN}" \
   "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}.tar.gz"
