@@ -3,7 +3,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 
 ## Features    
 - Build `Go` binaries for release and publish to Github Release Assets.     
-- Uses `golang 1.14`.    
+- Customizable `Go` versions. `golang 1.14` by default.    
 - Support different `Go` project path in repository.     
 - Support multiple binaries in same repository.    
 - Customizable binary name.     
@@ -17,7 +17,6 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 
 ```yaml
 # .github/workflows/release.yaml
-name: Release Go Binaries
 
 on: 
   release:
@@ -43,6 +42,7 @@ jobs:
 | github_token | **Mandatory** | Your `GITHUB_TOKEN` for uploading releases to Github asserts. |
 | goos | **Mandatory** | `GOOS` is the running program's operating system target: one of `darwin`, `freebsd`, `linux`, and so on. |
 | goarch | **Mandatory** | `GOARCH` is the running program's architecture target: one of `386`, `amd64`, `arm`, `s390x`, and so on. |
+| goversion |  **Optional** | The `Go` compiler version. `1.14` by default, optional `1.13`. <br>It also takes download URL instead of version string if you'd like to use more specified version. But make sure your URL is `linux-amd64` package, better to find the URL from [Go - Downloads](https://golang.org/dl/).<br>E.g., `https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz`. |
 | project_path | **Optional** | Where to run `go build`. <br>Use `.` by default. |
 | binary_name | **Optional** | Specify another binary name if do not want to use repository basename. <br>Use your repository's basename if not set. |
 
@@ -54,16 +54,10 @@ jobs:
 
 ```yaml
 # .github/workflows/release.yaml
-name: Release Go Binaries
 
 on: 
   release:
     types: [created]
-
-env:
-  GO_PROJECT_PATH: ./cmd/test-binary
-  BINARY_NAME: test-binary
-
 
 jobs:
   releases-matrix:
@@ -81,7 +75,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
-        project_path: "${{ env.GO_PROJECT_PATH }}"
-        binary_name: "${{ env.BINARY_NAME }}"
+        project_path: "./cmd/test-binary"
+        binary_name: "test-binary"
 ```
 
