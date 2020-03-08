@@ -1,7 +1,7 @@
 #!/bin/sh -eux
 
 # prepare golang
-/setup-go.sh 
+source /setup-go.sh 
 
 
 # prepare binary/release name
