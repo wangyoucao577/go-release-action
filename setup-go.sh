@@ -1,7 +1,7 @@
 #!/bin/bash -eux
 
 GO_LINUX_PACKAGE_URL="https://dl.google.com/go/go1.14.linux-amd64.tar.gz"
-if [ ${INPUT_GOVERSION} == "1.13" ]; then
+if [[ ${INPUT_GOVERSION} == "1.13" ]]; then
     GO_LINUX_PACKAGE_URL="https://dl.google.com/go/go1.13.8.linux-amd64.tar.gz"
 elif [[ ${INPUT_GOVERSION} == "http*" ]]; then
     GO_LINUX_PACKAGE_URL=${INPUT_GOVERSION}
