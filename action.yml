@@ -15,6 +15,10 @@ inputs:
     description: 'GOARCH is the running programs architecture target: one of 386, amd64, arm, s390x, and so on.'
     required: true
     default: ''
+  goversion:
+    description: 'The `Go` compiler version.'
+    required: false
+    default: ''
   project_path:
     description: 'Where to run `go build .`'
     required: false
@@ -30,6 +34,7 @@ runs:
     - ${{ inputs.github_token }}
     - ${{ inputs.goos }}
     - ${{ inputs.goarch }}
+    - ${{ inputs.goversion }}
     - ${{ inputs.project_path }}
     - ${{ inputs.binary_name }}
     - ${{ inputs.compression }}
