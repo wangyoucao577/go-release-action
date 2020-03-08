@@ -8,6 +8,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteract
   zip \
   jq
 
+
 COPY *.sh /
 ENTRYPOINT ["/entrypoint.sh"]
 
