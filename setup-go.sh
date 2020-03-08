@@ -1,4 +1,4 @@
-#!/bin/sh -eux
+#!/bin/bash -eux
 
 wget --progress=dot:mega https://dl.google.com/go/go1.14.linux-amd64.tar.gz -O go-linux-amd64.tar.gz 
 tar -zxf go-linux-amd64.tar.gz
