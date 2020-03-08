@@ -2,7 +2,7 @@
 
 # prepare golang
 source /setup-go.sh 
-
+go version
 
 # prepare binary/release name
 BINARY_NAME=$(basename ${GITHUB_REPOSITORY})
