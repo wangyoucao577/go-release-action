@@ -9,6 +9,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - Customizable binary name.     
 - Support multiple `GOOS`/`GOARCH` build in parallel by [Github Action Matrix Strategy](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategymatrix) gracefully.         
 - Publish `.zip` instead of `.tar.gz` for `windows`.     
+- No `musl` library dependency issue on `linux`.     
 
 ## Usage
 
