@@ -1,10 +1,18 @@
 
-FROM golang:1.14-alpine
+FROM debian:stretch-slim
 
-RUN apk add --no-cache curl jq git build-base zip
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+  curl \
+  wget \
+  git \
+  zip \
+  jq
 
-COPY entrypoint.sh /entrypoint.sh
+
+COPY *.sh /
 ENTRYPOINT ["/entrypoint.sh"]
 
 LABEL maintainer="Jay Zhang <wangyoucao577@gmail.com>"
+
+
 
