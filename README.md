@@ -51,6 +51,7 @@ jobs:
 - Release for multiple OS/ARCH in parallel by matrix strategy.    
 - `Go` code is not in `.` of your repository.    
 - Customize binary name.    
+- Use `go 1.13.1` from downloadable URL instead of default `1.14`.
 
 ```yaml
 # .github/workflows/release.yaml
@@ -75,6 +76,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
+        goversion: "https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz"
         project_path: "./cmd/test-binary"
         binary_name: "test-binary"
 ```
