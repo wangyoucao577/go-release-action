@@ -1,6 +1,8 @@
-#!/bin/sh
+#!/bin/sh -eux
 
-set -eux
+# prepare golang
+./setup-go.sh 
+
 
 # prepare binary/release name
 BINARY_NAME=$(basename ${GITHUB_REPOSITORY})
