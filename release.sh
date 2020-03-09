@@ -12,6 +12,11 @@ RELEASE_ASSET_NAME=${BINARY_NAME}-${RELEASE_TAG}-${INPUT_GOOS}-${INPUT_GOARCH}
 RELEASE_ASSETS_UPLOAD_URL=$(cat ${GITHUB_EVENT_PATH} | jq -r .release.upload_url)
 RELEASE_ASSETS_UPLOAD_URL=${RELEASE_ASSETS_UPLOAD_URL%\{?name,label\}}
 
+# execute pre-command if exist, e.g. `go get -v ./...`
+if [ x${INPUT_PRE_COMMAND} != x ]; then
+    ${INPUT_PRE_COMMAND}
+fi
+
 # build binary
 cd ${INPUT_PROJECT_PATH}
 EXT=''

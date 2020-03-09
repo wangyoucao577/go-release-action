@@ -1,7 +1,7 @@
 # action.yml
 name: 'Go Release Binaries'
 author: 'Jay Zhang <wangyoucao577@gmail.com>'
-description: 'Release Go binaries to Github Assets'
+description: 'Release Go binaries to GitHub Release Assets'
 inputs:
   github_token:
     description: 'GITHUB_TOKEN for uploading releases to Github asserts.'
@@ -27,6 +27,10 @@ inputs:
     description: 'Specify another binary name if do not want to use repository basename'
     required: false
     default: ''
+  pre_command:
+    description: 'Extra command that will be executed before `go build`, may for solving dependency'
+    required: false
+    default: ''
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -38,6 +42,7 @@ runs:
     - ${{ inputs.project_path }}
     - ${{ inputs.binary_name }}
     - ${{ inputs.compression }}
+    - ${{ inputs.pre_command }}
 branding:
   icon: 'package'  
   color: 'blue'
