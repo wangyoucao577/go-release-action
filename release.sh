@@ -13,7 +13,7 @@ RELEASE_ASSETS_UPLOAD_URL=$(cat ${GITHUB_EVENT_PATH} | jq -r .release.upload_url
 RELEASE_ASSETS_UPLOAD_URL=${RELEASE_ASSETS_UPLOAD_URL%\{?name,label\}}
 
 # execute pre-command if exist, e.g. `go get -v ./...`
-if [ x${INPUT_PRE_COMMAND} != x ]; then
+if [ ! -z "${INPUT_PRE_COMMAND}" ]; then
     ${INPUT_PRE_COMMAND}
 fi
 
