@@ -13,4 +13,3 @@ COPY *.sh /
 ENTRYPOINT ["/entrypoint.sh"]
 
 LABEL maintainer="Jay Zhang <wangyoucao577@gmail.com>"
-
