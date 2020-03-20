@@ -19,6 +19,14 @@ inputs:
     description: 'The `Go` compiler version.'
     required: false
     default: ''
+  build_flags:
+    description: 'Additional arguments to pass the go build command.'
+    required: false
+    default: ''
+  ldflags:
+    description: 'Values to provide to the -ldflags argument'
+    required: false
+    default: ''
   project_path:
     description: 'Where to run `go build .`'
     required: false
@@ -39,6 +47,8 @@ runs:
     - ${{ inputs.goos }}
     - ${{ inputs.goarch }}
     - ${{ inputs.goversion }}
+    - ${{ inputs.build_flags}}
+    - ${{ inputs.ldflags }}
     - ${{ inputs.project_path }}
     - ${{ inputs.binary_name }}
     - ${{ inputs.compression }}

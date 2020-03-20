@@ -23,7 +23,14 @@ EXT=''
 if [ ${INPUT_GOOS} == 'windows' ]; then
   EXT='.exe'
 fi
-GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} go build -o "${BINARY_NAME}${EXT}"
+
+GO_LDFLAGS=''
+if [ ! -z "${INPUT_LDFLAGS}" ]; then
+    GO_LDFLAGS="-ldflags \"${INPUT_LDFLAGS}\""
+fi
+
+
+bash -c "GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} go build ${INPUT_BUILD_FLAGS} ${GO_LDFLAGS} -o ${BINARY_NAME}${EXT}"
 ls -lh
 
 
