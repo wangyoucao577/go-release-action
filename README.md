@@ -11,6 +11,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - Publish `.zip` instead of `.tar.gz` for `windows`.     
 - No `musl` library dependency issue on `linux`.     
 - Support extra command that will be executed before `go build`. You may want to use it to solve dependency if you're NOT using [Go Modules](https://github.com/golang/go/wiki/Modules).       
+- Rich parameters support for `go build`(e.g. `-ldflags`, etc.).     
 
 ## Usage
 
@@ -47,8 +48,8 @@ jobs:
 | project_path | **Optional** | Where to run `go build`. <br>Use `.` by default. |
 | binary_name | **Optional** | Specify another binary name if do not want to use repository basename. <br>Use your repository's basename if not set. |
 | pre_command | **Optional** | Extra command that will be executed before `go build`. You may want to use it to solve dependency if you're NOT using [Go Modules](https://github.com/golang/go/wiki/Modules). |
-| build_flags | **Optional** | Additional arguments to pass the go build command. |
-| ldflags | **Optional** | Values to provide to the -ldflags argument. |
+| build_flags | **Optional** | Additional arguments to pass the `go build` command. |
+| ldflags | **Optional** | Values to provide to the `-ldflags` argument. |
 
 ### Advanced Example
 
@@ -84,4 +85,7 @@ jobs:
         project_path: "./cmd/test-binary"
         binary_name: "test-binary"
 ```
+
+### More Examples 
+- [wangyoucao577/vt2geojson - Release Go Binaries](https://github.com/wangyoucao577/vt2geojson/blob/master/.github/workflows/release.yml)
 
