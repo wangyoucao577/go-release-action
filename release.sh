@@ -30,7 +30,7 @@ if [ ! -z "${INPUT_LDFLAGS}" ]; then
 fi
 
 
-bash -c "GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} go build ${INPUT_BUILD_FLAGS} ${GO_LDFLAGS} -o ${BINARY_NAME}${EXT}"
+GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} go build ${INPUT_BUILD_FLAGS} ${GO_LDFLAGS} -o ${BINARY_NAME}${EXT}
 ls -lh
 
 
