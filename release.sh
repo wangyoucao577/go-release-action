@@ -24,13 +24,13 @@ if [ ${INPUT_GOOS} == 'windows' ]; then
   EXT='.exe'
 fi
 
-GO_LDFLAGS=''
+LDFLAGS_PREFIX=''
 if [ ! -z "${INPUT_LDFLAGS}" ]; then
-    GO_LDFLAGS="-ldflags \"${INPUT_LDFLAGS}\""
+    LDFLAGS_PREFIX="-ldflags"
 fi
 
 
-GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} go build ${INPUT_BUILD_FLAGS} ${GO_LDFLAGS} -o ${BINARY_NAME}${EXT}
+GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} go build ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}" -o ${BINARY_NAME}${EXT}
 ls -lh
 
 
