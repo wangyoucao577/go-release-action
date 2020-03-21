@@ -17,20 +17,21 @@ if [ ! -z "${INPUT_PRE_COMMAND}" ]; then
     ${INPUT_PRE_COMMAND}
 fi
 
-# build binary
+# binary suffix
 cd ${INPUT_PROJECT_PATH}
 EXT=''
 if [ ${INPUT_GOOS} == 'windows' ]; then
   EXT='.exe'
 fi
 
+# prefix for ldflags 
 LDFLAGS_PREFIX=''
 if [ ! -z "${INPUT_LDFLAGS}" ]; then
     LDFLAGS_PREFIX="-ldflags"
 fi
 
-
-GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} go build ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}" -o ${BINARY_NAME}${EXT}
+# build
+GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} go build -o ${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}" 
 ls -lh
 
 
