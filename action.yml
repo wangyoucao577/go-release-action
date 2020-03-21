@@ -51,7 +51,6 @@ runs:
     - ${{ inputs.ldflags }}
     - ${{ inputs.project_path }}
     - ${{ inputs.binary_name }}
-    - ${{ inputs.compression }}
     - ${{ inputs.pre_command }}
 branding:
   icon: 'package'  
