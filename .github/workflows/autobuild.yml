@@ -1,0 +1,50 @@
+name: Build Docker 
+
+on: 
+  push:
+    branches:
+    - '**'
+    paths-ignore:
+    - '*.md'
+
+jobs:
+
+  build:
+    name: Build & Publish Docker
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set DOCKER_REPO_NAME env 
+      run: echo ::set-env name=DOCKER_REPO_NAME::$(basename ${GITHUB_REPOSITORY})
+    - name: Set IMAGE_TAG env 
+      run: echo ::set-env name=IMAGE_TAG::$(basename ${GITHUB_REF})
+    - name: Environment Printer
+      uses: managedkaos/print-env@v1.0
+    - name: Append latest if master branches # env '${IMAGE_TAG},latest'
+      if: endsWith(github.ref, 'master')
+      run: echo ::set-env name=IMAGE_TAG::${IMAGE_TAG},latest
+    - name: Environment Printer
+      uses: managedkaos/print-env@v1.0
+
+    - name: Build & Publish to Github Package
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: ${{ github.repository }}/${{ env.DOCKER_REPO_NAME }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: docker.pkg.github.com
+        snapshot: false
+        tags: "${{ env.IMAGE_TAG }}"
+
+    - name: Build & Publish to DockerHub
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: ${{ github.repository }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        snapshot: false
+        tags: "${{ env.IMAGE_TAG }}"
+
