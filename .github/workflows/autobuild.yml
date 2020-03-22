@@ -10,6 +10,7 @@ on:
 jobs:
 
   build:
+    name: Build & Publish Docker
 
     runs-on: ubuntu-latest
 
