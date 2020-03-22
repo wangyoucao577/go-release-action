@@ -31,7 +31,7 @@ jobs:
     - name: Build & Publish to Github Package
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: ${{ github.repository }} / ${{ env.DOCKER_REPO_NAME }}
+        name: ${{ github.repository }}/${{ env.DOCKER_REPO_NAME }}
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
