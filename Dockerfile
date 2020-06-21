@@ -1,12 +1,13 @@
 
 FROM debian:stretch-slim
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
   curl \
   wget \
   git \
   zip \
-  jq
+  jq \
+  && rm -rf /var/lib/apt/lists/*
 
 
 COPY *.sh /
