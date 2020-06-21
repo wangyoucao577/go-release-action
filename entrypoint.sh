@@ -1,6 +1,7 @@
 #!/bin/bash -eux
 
 # prepare golang
+# shellcheck source=./setup-go.sh
 source /setup-go.sh 
 
 # easy to debug if anything wrong
