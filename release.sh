@@ -18,7 +18,6 @@ if [ ! -z "${INPUT_PRE_COMMAND}" ]; then
 fi
 
 # binary suffix
-cd ${INPUT_PROJECT_PATH}
 EXT=''
 if [ ${INPUT_GOOS} == 'windows' ]; then
   EXT='.exe'
@@ -31,15 +30,17 @@ if [ ! -z "${INPUT_LDFLAGS}" ]; then
 fi
 
 # build
+cd ${INPUT_PROJECT_PATH}
 BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
 mkdir -p ${BUILD_ARTIFACTS_FOLDER}
 GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} go build -o ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}" 
 
 # prepare extra files
 if [ ! -z "${INPUT_EXTRA_FILES}" ]; then
-  cp -r ${INPUT_EXTRA_FILES} ${BUILD_ARTIFACTS_FOLDER}/
+  cd ${GITHUB_WORKSPACE}
+  cp -r ${INPUT_EXTRA_FILES} ${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}/
+  cd ${INPUT_PROJECT_PATH}
 fi
-
 
 cd ${BUILD_ARTIFACTS_FOLDER}
 ls -lh
