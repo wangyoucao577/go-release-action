@@ -49,7 +49,7 @@ ls -lha
 RELEASE_ASSET_EXT='.tar.gz'
 if [ ${INPUT_GOOS} == 'windows' ]; then
 RELEASE_ASSET_EXT='.zip'
-zip -v ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} *
+zip -vr ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} *
 else
 tar cvfz ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} *
 fi
