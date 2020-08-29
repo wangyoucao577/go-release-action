@@ -39,6 +39,10 @@ inputs:
     description: 'Extra command that will be executed before `go build`, may for solving dependency'
     required: false
     default: ''
+  extra_files:
+    description: 'Extra files that will be packaged into artifacts either.'
+    required: false
+    default: ''
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -52,6 +56,7 @@ runs:
     - ${{ inputs.project_path }}
     - ${{ inputs.binary_name }}
     - ${{ inputs.pre_command }}
+    - ${{ inputs.extra_files }}
 branding:
   icon: 'package'  
   color: 'blue'

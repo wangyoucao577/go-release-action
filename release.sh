@@ -34,17 +34,23 @@ fi
 BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
 mkdir -p ${BUILD_ARTIFACTS_FOLDER}
 GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} go build -o ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}" 
+
+# prepare extra files
+if [ ! -z "${INPUT_EXTRA_FILES}" ]; then
+  cp -r ${INPUT_EXTRA_FILES} ${BUILD_ARTIFACTS_FOLDER}/
+fi
+
+
 cd ${BUILD_ARTIFACTS_FOLDER}
 ls -lh
-
 
 # compress and package binary, then calculate checksum
 RELEASE_ASSET_EXT='.tar.gz'
 if [ ${INPUT_GOOS} == 'windows' ]; then
 RELEASE_ASSET_EXT='.zip'
-zip -v ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} "${BINARY_NAME}${EXT}"
+zip -v ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} *
 else
-tar cvfz ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} "${BINARY_NAME}${EXT}"
+tar cvfz ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} *
 fi
 MD5_SUM=$(md5sum ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} | cut -d ' ' -f 1)
 
