@@ -43,7 +43,7 @@ if [ ! -z "${INPUT_EXTRA_FILES}" ]; then
 fi
 
 cd ${BUILD_ARTIFACTS_FOLDER}
-ls -lh
+ls -lha
 
 # compress and package binary, then calculate checksum
 RELEASE_ASSET_EXT='.tar.gz'
