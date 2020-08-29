@@ -13,6 +13,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - No `musl` library dependency issue on `linux`.     
 - Support extra command that will be executed before `go build`. You may want to use it to solve dependency if you're NOT using [Go Modules](https://github.com/golang/go/wiki/Modules).       
 - Rich parameters support for `go build`(e.g. `-ldflags`, etc.).     
+- Support package extra files into artifacts (e.g., `LICENSE`, `README.md`, etc).    
 
 ## Usage
 
@@ -51,6 +52,7 @@ jobs:
 | pre_command | **Optional** | Extra command that will be executed before `go build`. You may want to use it to solve dependency if you're NOT using [Go Modules](https://github.com/golang/go/wiki/Modules). |
 | build_flags | **Optional** | Additional arguments to pass the `go build` command. |
 | ldflags | **Optional** | Values to provide to the `-ldflags` argument. |
+| extra_files | **Optional** | Extra files that will be packaged into artifacts either. Multiple files separated by space. Note that extra folders can be allowed either since internal `cp -r` already in use. <br>E.g., `extra_files: LICENSE README.md` |
 
 ### Advanced Example
 
@@ -58,6 +60,7 @@ jobs:
 - `Go` code is not in `.` of your repository.    
 - Customize binary name.    
 - Use `go 1.13.1` from downloadable URL instead of default `1.14`.
+- Package extra `LICENSE` and `README.md` into artifacts.    
 
 ```yaml
 # .github/workflows/release.yaml
@@ -85,6 +88,7 @@ jobs:
         goversion: "https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz"
         project_path: "./cmd/test-binary"
         binary_name: "test-binary"
+        extra_files: LICENSE README.md
 ```
 
 ### More Examples 
