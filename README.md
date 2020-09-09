@@ -94,5 +94,5 @@ jobs:
 ```
 
 ### More Examples 
-- [wangyoucao577/vt2geojson - Release Go Binaries](https://github.com/wangyoucao577/vt2geojson/blob/master/.github/workflows/release.yml)
-
+Welcome share your usage for other people's reference!    
+- https://github.com/wangyoucao577/go-release-action/wiki/More-Examples
