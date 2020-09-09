@@ -15,6 +15,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - Rich parameters support for `go build`(e.g. `-ldflags`, etc.).     
 - Support package extra files into artifacts (e.g., `LICENSE`, `README.md`, etc).    
 - Support customize build command, e.g., use [packr2](https://github.com/gobuffalo/packr/tree/master/v2)(`packr2 build`) instead of `go build`.     
+- Support optional `.md5` along with artifacts.     
 
 ## Usage
 
@@ -55,6 +56,8 @@ jobs:
 | build_flags | **Optional** | Additional arguments to pass the `go build` command. |
 | ldflags | **Optional** | Values to provide to the `-ldflags` argument. |
 | extra_files | **Optional** | Extra files that will be packaged into artifacts either. Multiple files separated by space. Note that extra folders can be allowed either since internal `cp -r` already in use. <br>E.g., `extra_files: LICENSE README.md` |
+| md5sum | **Optional** | Publish `.md5` along with artifacts, `TRUE` by default. |
+
 
 ### Advanced Example
 
@@ -95,4 +98,4 @@ jobs:
 
 ### More Examples 
 Welcome share your usage for other people's reference!    
-- https://github.com/wangyoucao577/go-release-action/wiki/More-Examples
+- [wiki/More-Examples](https://github.com/wangyoucao577/go-release-action/wiki/More-Examples)
