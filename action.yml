@@ -39,6 +39,10 @@ inputs:
     description: 'Extra command that will be executed before `go build`, may for solving dependency'
     required: false
     default: ''
+  build_command:
+    description: 'The actual command to build binary, typically `go build`.'
+    required: false
+    default: 'go build'
   extra_files:
     description: 'Extra files that will be packaged into artifacts either.'
     required: false
@@ -56,6 +60,7 @@ runs:
     - ${{ inputs.project_path }}
     - ${{ inputs.binary_name }}
     - ${{ inputs.pre_command }}
+    - ${{ inputs.build_command }}
     - ${{ inputs.extra_files }}
 branding:
   icon: 'package'  
