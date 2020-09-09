@@ -5,6 +5,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteract
   curl \
   wget \
   git \
+  build-essential \
   zip \
   jq
 
