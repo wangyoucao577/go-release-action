@@ -13,7 +13,7 @@ mv go /usr/local/
 mkdir -p /go/bin /go/src /go/pkg
 
 export GO_HOME=/usr/local/go
-export PATH=${GO_HOME}/bin/:$PATH
 export GOPATH=/go
+export PATH=${GOPATH}/bin:${GO_HOME}/bin/:$PATH
 
 
