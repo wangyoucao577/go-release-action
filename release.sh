@@ -65,6 +65,7 @@ curl \
   "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}"
 echo $?
 
+if [ ${INPUT_MD5SUM^^} == 'TRUE' ]; then
 curl \
   --fail \
   -X POST \
@@ -73,3 +74,4 @@ curl \
   -H "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
   "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}.md5"
 echo $?
+fi

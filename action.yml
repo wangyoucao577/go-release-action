@@ -47,6 +47,11 @@ inputs:
     description: 'Extra files that will be packaged into artifacts either.'
     required: false
     default: ''
+  md5sum:
+    description: 'Publish `.md5` along with artifacts.'
+    required: false
+    default: 'TRUE'
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -62,6 +67,8 @@ runs:
     - ${{ inputs.pre_command }}
     - ${{ inputs.build_command }}
     - ${{ inputs.extra_files }}
+    - ${{ inputs.md5sum }}
+
 branding:
   icon: 'package'  
   color: 'blue'
