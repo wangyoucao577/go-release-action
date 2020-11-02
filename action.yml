@@ -51,6 +51,10 @@ inputs:
     description: 'Publish `.md5` along with artifacts.'
     required: false
     default: 'TRUE'
+  release_tag:
+    description: 'Upload binaries to specified release page that indicated by Git tag.'
+    required: false
+    default: ''
 
 runs:
   using: 'docker'
@@ -68,6 +72,7 @@ runs:
     - ${{ inputs.build_command }}
     - ${{ inputs.extra_files }}
     - ${{ inputs.md5sum }}
+    - ${{ inputs.release_tag }}
 
 branding:
   icon: 'package'  
