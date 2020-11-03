@@ -5,22 +5,18 @@ BINARY_NAME=$(basename ${GITHUB_REPOSITORY})
 if [ x${INPUT_BINARY_NAME} != x ]; then
   BINARY_NAME=${INPUT_BINARY_NAME}
 fi
-if [ ! -z "${INPUT_RELEASE_TAG}" ]; then
-    RELEASE_TAG=${INPUT_RELEASE_TAG}
-else
-    # have to triggered by 'release: [create]' event, so that we can parse the tag from ref
-    RELEASE_TAG=$(basename ${GITHUB_REF})
-fi 
 
 # prepare upload URL and asset name
 if [ ${GITHUB_EVENT_NAME} == 'release' ]; then
     # only for 'release: [created]' event, we can parse event directly to get upload_url
     RELEASE_ASSETS_UPLOAD_URL=$(cat ${GITHUB_EVENT_PATH} | jq -r .release.upload_url)
+    RELEASE_TAG=$(basename ${GITHUB_REF})
     RELEASE_ASSET_NAME=${BINARY_NAME}-${RELEASE_TAG}-${INPUT_GOOS}-${INPUT_GOARCH}
 else
-    # otherwise we have to get upload url via Github API, e.g., triggerred by 'push' event that no upload url info 
-    RELEASE_ASSETS_UPLOAD_URL=$(curl "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}" | jq -r .upload_url) 
-    RELEASE_ASSET_NAME=${BINARY_NAME}-${RELEASE_TAG}-${GITHUB_SHA::7}-${INPUT_GOOS}-${INPUT_GOARCH}
+    # otherwise we have to get upload url via Github API, e.g., triggerred by 'push' event that no upload url info. 'INPUT_RELEASE_TAG' has to be set in this case. 
+    RELEASE_ASSETS_UPLOAD_URL=$(curl "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/${INPUT_RELEASE_TAG}" | jq -r .upload_url) 
+    BRANCH_NAME=$(basename ${GITHUB_REF})
+    RELEASE_ASSET_NAME=${BINARY_NAME}-${BRANCH_NAME}-$(date -u +%Y%m%d)-${GITHUB_SHA::7}-${INPUT_GOOS}-${INPUT_GOARCH}
 fi
 RELEASE_ASSETS_UPLOAD_URL=${RELEASE_ASSETS_UPLOAD_URL%\{?name,label\}}
 
