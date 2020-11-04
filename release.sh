@@ -70,7 +70,7 @@ echo ${MD5_SUM} >${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${MD5_EXT}
 
 # prefix upload extra params 
 GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS=''
-if [ ! -z "${INPUT_OVERWRITE}" ]; then
+if [ ${INPUT_OVERWRITE^^} == 'TRUE' ]; then
     GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS="-overwrite"
 fi
 
