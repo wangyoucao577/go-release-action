@@ -59,8 +59,10 @@ ls -lha
 
 # compress and package binary, then calculate checksum
 RELEASE_ASSET_EXT='.tar.gz'
+MEDIA_TYPE='application/gzip'
 if [ ${INPUT_GOOS} == 'windows' ]; then
 RELEASE_ASSET_EXT='.zip'
+MEDIA_TYPE='application/zip'
 zip -vr ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} *
 else
 tar cvfz ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} *
@@ -68,14 +70,7 @@ fi
 MD5_SUM=$(md5sum ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} | cut -d ' ' -f 1)
 
 # update binary and checksum
-curl \
-  --fail \
-  -X POST \
-  --data-binary @${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} \
-  -H 'Content-Type: application/gzip' \
-  -H "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
-  "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}"
-echo $?
+github-assets-uploader -f ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} -repo ${GITHUB_REPOSITORY} -token ${INPUT_GITHUB_TOKEN} -mediatype ${MEDIA_TYPE} -tag ${RELEASE_TAG}
 
 if [ ${INPUT_MD5SUM^^} == 'TRUE' ]; then
 curl \
