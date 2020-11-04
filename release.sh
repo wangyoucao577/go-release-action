@@ -69,16 +69,12 @@ tar cvfz ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} *
 fi
 MD5_SUM=$(md5sum ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} | cut -d ' ' -f 1)
 
-# update binary and checksum
-github-assets-uploader -f ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} -repo ${GITHUB_REPOSITORY} -token ${INPUT_GITHUB_TOKEN} -mediatype ${MEDIA_TYPE} -tag ${RELEASE_TAG}
+MD5_EXT='.md5'
+MD5_MEDIA_TYPE='text/plain'
+echo ${MD5_SUM} >${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${MD5_EXT}
 
+# update binary and checksum
+github-assets-uploader -f ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} -mediatype ${MEDIA_TYPE} -repo ${GITHUB_REPOSITORY} -token ${INPUT_GITHUB_TOKEN} -tag ${RELEASE_TAG}
 if [ ${INPUT_MD5SUM^^} == 'TRUE' ]; then
-curl \
-  --fail \
-  -X POST \
-  --data ${MD5_SUM} \
-  -H 'Content-Type: text/plain' \
-  -H "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
-  "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}.md5"
-echo $?
+github-assets-uploader -f ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${MD5_EXT} -mediatype ${MD5_MEDIA_TYPE} -repo ${GITHUB_REPOSITORY} -token ${INPUT_GITHUB_TOKEN} -tag ${RELEASE_TAG}
 fi
