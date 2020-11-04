@@ -11,18 +11,13 @@ if [ ! -z "${INPUT_RELEASE_TAG}" ]; then
 fi
 RELEASE_ASSET_NAME=${BINARY_NAME}-${RELEASE_TAG}-${INPUT_GOOS}-${INPUT_GOARCH}
 
-# prepare upload URL and asset name
+# prompt error if non-supported event
 if [ ${GITHUB_EVENT_NAME} == 'release' ]; then
-    # only for 'release: [created]' event, we can parse event directly to get upload_url
-    RELEASE_ASSETS_UPLOAD_URL=$(cat ${GITHUB_EVENT_PATH} | jq -r .release.upload_url)
 elif [ ${GITHUB_EVENT_NAME} == 'push' ]; then
-    # otherwise we have to get upload url via Github API, e.g., triggerred by 'push' event that no upload url info. 'INPUT_RELEASE_TAG' has to be set in this case. 
-    RELEASE_ASSETS_UPLOAD_URL=$(curl "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/${INPUT_RELEASE_TAG}" | jq -r .upload_url) 
 else
     echo "Unsupport event: ${GITHUB_EVENT_NAME}!"
     exit 1
 fi
-RELEASE_ASSETS_UPLOAD_URL=${RELEASE_ASSETS_UPLOAD_URL%\{?name,label\}}
 
 # execute pre-command if exist, e.g. `go get -v ./...`
 if [ ! -z "${INPUT_PRE_COMMAND}" ]; then
@@ -73,8 +68,14 @@ MD5_EXT='.md5'
 MD5_MEDIA_TYPE='text/plain'
 echo ${MD5_SUM} >${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${MD5_EXT}
 
+# prefix upload extra params 
+GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS=''
+if [ ! -z "${INPUT_OVERWRITE}" ]; then
+    GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS="-overwrite"
+fi
+
 # update binary and checksum
-github-assets-uploader -f ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} -mediatype ${MEDIA_TYPE} -repo ${GITHUB_REPOSITORY} -token ${INPUT_GITHUB_TOKEN} -tag ${RELEASE_TAG}
+github-assets-uploader -f ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} -mediatype ${MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${GITHUB_REPOSITORY} -token ${INPUT_GITHUB_TOKEN} -tag ${RELEASE_TAG}
 if [ ${INPUT_MD5SUM^^} == 'TRUE' ]; then
-github-assets-uploader -f ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${MD5_EXT} -mediatype ${MD5_MEDIA_TYPE} -repo ${GITHUB_REPOSITORY} -token ${INPUT_GITHUB_TOKEN} -tag ${RELEASE_TAG}
+github-assets-uploader -f ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${MD5_EXT} -mediatype ${MD5_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${GITHUB_REPOSITORY} -token ${INPUT_GITHUB_TOKEN} -tag ${RELEASE_TAG}
 fi
