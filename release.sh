@@ -13,7 +13,9 @@ RELEASE_ASSET_NAME=${BINARY_NAME}-${RELEASE_TAG}-${INPUT_GOOS}-${INPUT_GOARCH}
 
 # prompt error if non-supported event
 if [ ${GITHUB_EVENT_NAME} == 'release' ]; then
+    echo "Event: ${GITHUB_EVENT_NAME}"
 elif [ ${GITHUB_EVENT_NAME} == 'push' ]; then
+    echo "Event: ${GITHUB_EVENT_NAME}"
 else
     echo "Unsupport event: ${GITHUB_EVENT_NAME}!"
     exit 1
