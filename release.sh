@@ -54,6 +54,7 @@ else
 tar cvfz ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} *
 fi
 MD5_SUM=$(md5sum ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} | cut -d ' ' -f 1)
+SHA256_SUM=$(sha256sum ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} | cut -d ' ' -f 1)
 
 # update binary and checksum
 curl \
@@ -73,5 +74,16 @@ curl \
   -H 'Content-Type: text/plain' \
   -H "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
   "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}.md5"
+echo $?
+fi
+
+if [ ${INPUT_SHA256SUM^^} == 'TRUE' ]; then
+curl \
+  --fail \
+  --X POST \
+  --data ${SHA256_SUM} \
+  -H 'Content-Type: text/plain' \
+  -H "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
+  "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}.sha256"
 echo $?
 fi
