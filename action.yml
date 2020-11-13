@@ -55,6 +55,14 @@ inputs:
     description: 'Publish `.sha256` along with artifacts.'
     required: false
     default: 'FALSE'
+  release_tag:
+    description: 'Upload binaries to specified release page that indicated by Git tag.'
+    required: false
+    default: ''
+  overwrite:
+    description: "Overwrite asset if it's already exist."
+    required: false
+    default: 'FALSE'
 
 runs:
   using: 'docker'
@@ -73,6 +81,8 @@ runs:
     - ${{ inputs.extra_files }}
     - ${{ inputs.md5sum }}
     - ${{ inputs.sha256sum }}
+    - ${{ inputs.release_tag }}
+    - ${{ inputs.overwrite }}
 
 branding:
   icon: 'package'  

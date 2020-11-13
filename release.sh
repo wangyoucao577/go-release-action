@@ -1,16 +1,25 @@
 #!/bin/bash -eux
 
-# prepare binary/release name
+# prepare binary_name/release_tag/release_asset_name
 BINARY_NAME=$(basename ${GITHUB_REPOSITORY})
 if [ x${INPUT_BINARY_NAME} != x ]; then
   BINARY_NAME=${INPUT_BINARY_NAME}
 fi
 RELEASE_TAG=$(basename ${GITHUB_REF})
+if [ ! -z "${INPUT_RELEASE_TAG}" ]; then
+    RELEASE_TAG=${INPUT_RELEASE_TAG}
+fi
 RELEASE_ASSET_NAME=${BINARY_NAME}-${RELEASE_TAG}-${INPUT_GOOS}-${INPUT_GOARCH}
 
-# prepare upload URL
-RELEASE_ASSETS_UPLOAD_URL=$(cat ${GITHUB_EVENT_PATH} | jq -r .release.upload_url)
-RELEASE_ASSETS_UPLOAD_URL=${RELEASE_ASSETS_UPLOAD_URL%\{?name,label\}}
+# prompt error if non-supported event
+if [ ${GITHUB_EVENT_NAME} == 'release' ]; then
+    echo "Event: ${GITHUB_EVENT_NAME}"
+elif [ ${GITHUB_EVENT_NAME} == 'push' ]; then
+    echo "Event: ${GITHUB_EVENT_NAME}"
+else
+    echo "Unsupport event: ${GITHUB_EVENT_NAME}!"
+    exit 1
+fi
 
 # execute pre-command if exist, e.g. `go get -v ./...`
 if [ ! -z "${INPUT_PRE_COMMAND}" ]; then
@@ -47,8 +56,10 @@ ls -lha
 
 # compress and package binary, then calculate checksum
 RELEASE_ASSET_EXT='.tar.gz'
+MEDIA_TYPE='application/gzip'
 if [ ${INPUT_GOOS} == 'windows' ]; then
 RELEASE_ASSET_EXT='.zip'
+MEDIA_TYPE='application/zip'
 zip -vr ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} *
 else
 tar cvfz ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} *
@@ -56,34 +67,24 @@ fi
 MD5_SUM=$(md5sum ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} | cut -d ' ' -f 1)
 SHA256_SUM=$(sha256sum ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} | cut -d ' ' -f 1)
 
-# update binary and checksum
-curl \
-  --fail \
-  -X POST \
-  --data-binary @${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} \
-  -H 'Content-Type: application/gzip' \
-  -H "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
-  "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}"
-echo $?
+# prefix upload extra params 
+GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS=''
+if [ ${INPUT_OVERWRITE^^} == 'TRUE' ]; then
+    GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS="-overwrite"
+fi
 
+# update binary and checksum
+github-assets-uploader -f ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} -mediatype ${MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${GITHUB_REPOSITORY} -token ${INPUT_GITHUB_TOKEN} -tag ${RELEASE_TAG}
 if [ ${INPUT_MD5SUM^^} == 'TRUE' ]; then
-curl \
-  --fail \
-  -X POST \
-  --data ${MD5_SUM} \
-  -H 'Content-Type: text/plain' \
-  -H "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
-  "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}.md5"
-echo $?
+MD5_EXT='.md5'
+MD5_MEDIA_TYPE='text/plain'
+echo ${MD5_SUM} >${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${MD5_EXT}
+github-assets-uploader -f ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${MD5_EXT} -mediatype ${MD5_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${GITHUB_REPOSITORY} -token ${INPUT_GITHUB_TOKEN} -tag ${RELEASE_TAG}
 fi
 
 if [ ${INPUT_SHA256SUM^^} == 'TRUE' ]; then
-curl \
-  --fail \
-  --X POST \
-  --data ${SHA256_SUM} \
-  -H 'Content-Type: text/plain' \
-  -H "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
-  "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}.sha256"
-echo $?
+SHA256_EXT='.sha256'
+SHA256_MEDIA_TYPE='text/plain'
+echo ${SHA256_SUM} >${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${SHA256_EXT}
+github-assets-uploader -f ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${SHA256_EXT} -mediatype ${SHA256_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${GITHUB_REPOSITORY} -token ${INPUT_GITHUB_TOKEN} -tag ${RELEASE_TAG}
 fi
