@@ -15,7 +15,8 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - Rich parameters support for `go build`(e.g. `-ldflags`, etc.).     
 - Support package extra files into artifacts (e.g., `LICENSE`, `README.md`, etc).    
 - Support customize build command, e.g., use [packr2](https://github.com/gobuffalo/packr/tree/master/v2)(`packr2 build`) instead of `go build`.     
-- Support optional `.md5` along with artifacts.     
+- Support optional `.md5` along with artifacts. 
+- Support optional `.sha256` along with artifacts.     
 - Customizable release tag to support publish binaries per `push`.      
 - Support overwrite assets if it's already exist.    
 
@@ -59,6 +60,7 @@ jobs:
 | ldflags | **Optional** | Values to provide to the `-ldflags` argument. |
 | extra_files | **Optional** | Extra files that will be packaged into artifacts either. Multiple files separated by space. Note that extra folders can be allowed either since internal `cp -r` already in use. <br>E.g., `extra_files: LICENSE README.md` |
 | md5sum | **Optional** | Publish `.md5` along with artifacts, `TRUE` by default. |
+| sha256sum | **Optional** | Publish `.sha256` along with artifacts, `FALSE` by default. |
 | release_tag | **Optional** | Target release tag to publish your binaries to. It's dedicated to publish binaries on every `push` into one specified release page since there's no target in this case. DON'T set it if you trigger the action by `release: [created]` event as most people do.|
 | overwrite | **Optional** | Overwrite asset if it's alreaddy exist.|
 
