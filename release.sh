@@ -67,10 +67,6 @@ fi
 MD5_SUM=$(md5sum ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} | cut -d ' ' -f 1)
 SHA256_SUM=$(sha256sum ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} | cut -d ' ' -f 1)
 
-MD5_EXT='.md5'
-MD5_MEDIA_TYPE='text/plain'
-echo ${MD5_SUM} >${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${MD5_EXT}
-
 # prefix upload extra params 
 GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS=''
 if [ ${INPUT_OVERWRITE^^} == 'TRUE' ]; then
@@ -80,16 +76,15 @@ fi
 # update binary and checksum
 github-assets-uploader -f ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} -mediatype ${MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${GITHUB_REPOSITORY} -token ${INPUT_GITHUB_TOKEN} -tag ${RELEASE_TAG}
 if [ ${INPUT_MD5SUM^^} == 'TRUE' ]; then
+MD5_EXT='.md5'
+MD5_MEDIA_TYPE='text/plain'
+echo ${MD5_SUM} >${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${MD5_EXT}
 github-assets-uploader -f ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${MD5_EXT} -mediatype ${MD5_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${GITHUB_REPOSITORY} -token ${INPUT_GITHUB_TOKEN} -tag ${RELEASE_TAG}
 fi
 
 if [ ${INPUT_SHA256SUM^^} == 'TRUE' ]; then
-curl \
-  --fail \
-  --X POST \
-  --data ${SHA256_SUM} \
-  -H 'Content-Type: text/plain' \
-  -H "Authorization: Bearer ${INPUT_GITHUB_TOKEN}" \
-  "${RELEASE_ASSETS_UPLOAD_URL}?name=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}.sha256"
-echo $?
+SHA256_EXT='.sha256'
+SHA256_MEDIA_TYPE='text/plain'
+echo ${SHA256_SUM} >${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${SHA256_EXT}
+github-assets-uploader -f ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}${SHA256_EXT} -mediatype ${SHA256_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${GITHUB_REPOSITORY} -token ${INPUT_GITHUB_TOKEN} -tag ${RELEASE_TAG}
 fi
