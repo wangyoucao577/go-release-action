@@ -62,7 +62,7 @@ jobs:
 | md5sum | **Optional** | Publish `.md5` along with artifacts, `TRUE` by default. |
 | sha256sum | **Optional** | Publish `.sha256` along with artifacts, `FALSE` by default. |
 | release_tag | **Optional** | Target release tag to publish your binaries to. It's dedicated to publish binaries on every `push` into one specified release page since there's no target in this case. DON'T set it if you trigger the action by `release: [created]` event as most people do.|
-| overwrite | **Optional** | Overwrite asset if it's alreaddy exist.|
+| overwrite | **Optional** | Overwrite asset if it's already exist. `FALSE` by default. |
 
 ### Advanced Example
 
