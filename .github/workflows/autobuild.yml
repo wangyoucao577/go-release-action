@@ -18,14 +18,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Set DOCKER_REPO_NAME env 
-      run: echo ::set-env name=DOCKER_REPO_NAME::$(basename ${GITHUB_REPOSITORY})
+      run: echo DOCKER_REPO_NAME=$(basename ${GITHUB_REPOSITORY}) >> ${GITHUB_ENV}
     - name: Set IMAGE_TAG env 
-      run: echo ::set-env name=IMAGE_TAG::$(basename ${GITHUB_REF})
+      run: echo IMAGE_TAG=$(basename ${GITHUB_REF}) >> ${GITHUB_ENV}
     - name: Environment Printer
       uses: managedkaos/print-env@v1.0
     - name: Append latest if master branches # env '${IMAGE_TAG},latest'
       if: endsWith(github.ref, 'master')
-      run: echo ::set-env name=IMAGE_TAG::${IMAGE_TAG},latest
+      run: echo IMAGE_TAG=${IMAGE_TAG},latest >> ${GITHUB_ENV}
     - name: Environment Printer
       uses: managedkaos/print-env@v1.0
 
