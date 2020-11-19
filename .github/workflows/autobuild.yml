@@ -25,7 +25,7 @@ jobs:
       uses: managedkaos/print-env@v1.0
     - name: Append latest if master branches # env '${IMAGE_TAG},latest'
       if: endsWith(github.ref, 'master')
-      run: echo IMAGE_TAG=${IMAGE_TAG},latest >> ${GITHUB_ENV}
+      run: echo IMAGE_TAG=${IMAGE_TAG},master,latest >> ${GITHUB_ENV}
     - name: Environment Printer
       uses: managedkaos/print-env@v1.0
 
