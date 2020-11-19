@@ -3,7 +3,8 @@ name: Release Action Docker
 on: 
   push:
     tags:
-    - '**'
+    - 'v**'
+    - '!*-prebuilt' # don't want to build docker image for 'prebuilt' suffix tag
 
 jobs:
 
