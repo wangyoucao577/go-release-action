@@ -10,6 +10,9 @@ if [ ! -z "${INPUT_RELEASE_TAG}" ]; then
     RELEASE_TAG=${INPUT_RELEASE_TAG}
 fi
 RELEASE_ASSET_NAME=${BINARY_NAME}-${RELEASE_TAG}-${INPUT_GOOS}-${INPUT_GOARCH}
+if [ ! -z "${INPUT_ASSET_NAME}" ]; then
+    RELEASE_ASSET_NAME=${INPUT_ASSET_NAME}
+fi
 
 # prompt error if non-supported event
 if [ ${GITHUB_EVENT_NAME} == 'release' ]; then

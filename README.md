@@ -19,6 +19,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - Support optional `.sha256` along with artifacts.     
 - Customizable release tag to support publish binaries per `push`.      
 - Support overwrite assets if it's already exist.    
+- Support customizable asset name.      
 
 ## Usage
 
@@ -63,6 +64,7 @@ jobs:
 | sha256sum | **Optional** | Publish `.sha256` along with artifacts, `FALSE` by default. |
 | release_tag | **Optional** | Target release tag to publish your binaries to. It's dedicated to publish binaries on every `push` into one specified release page since there's no target in this case. DON'T set it if you trigger the action by `release: [created]` event as most people do.|
 | overwrite | **Optional** | Overwrite asset if it's already exist. `FALSE` by default. |
+| asset_name | **Optional** | Customize asset name if do not want to use the default format `${BINARY_NAME}-${RELEASE_TAG}-${GOOS}-${GOARCH}`. <br>Make sure set it correctly, especially for matrix usage. A correct example is ``. |
 
 ### Advanced Example
 
