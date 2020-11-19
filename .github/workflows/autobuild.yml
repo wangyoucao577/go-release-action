@@ -2,10 +2,8 @@ name: Build Docker
 
 on: 
   push:
-    branches:
-    - '**'
-    paths-ignore:
-    - '*.md'
+    branches-ignore:
+    - '*-prebuilt'
 
 jobs:
 
