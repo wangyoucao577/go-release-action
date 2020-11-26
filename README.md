@@ -2,6 +2,12 @@
 ![Build Docker](https://github.com/wangyoucao577/go-release-action/workflows/Build%20Docker/badge.svg)    
 Automatically publish `Go` binaries to Github Release Assets through Github Action.    
 
+## Choose version
+- **Prefer latest release**(**faster** & **stable**): `wangyoucao577/go-release-action@v1.11`     
+- If always want to work with newest changes:     
+  - try out **faster** pre-built master: `wangyoucao577/go-release-action@master-prebuilt`
+  - or use classic master: `wangyoucao577/go-release-action@master`
+
 ## Features    
 - Build `Go` binaries for release and publish to Github Release Assets.     
 - Customizable `Go` versions. `golang 1.14` by default.    
@@ -37,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: wangyoucao577/go-release-action@master
+    - uses: wangyoucao577/go-release-action@v1.11
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: linux
@@ -90,7 +96,7 @@ jobs:
         goarch: ["386", amd64]
     steps:
     - uses: actions/checkout@v2
-    - uses: wangyoucao577/go-release-action@master
+    - uses: wangyoucao577/go-release-action@v1.11
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
