@@ -110,3 +110,5 @@ jobs:
 ### More Examples 
 Welcome share your usage for other people's reference!    
 - [wiki/More-Examples](https://github.com/wangyoucao577/go-release-action/wiki/More-Examples)
+
+[:clap:](":clap:")[:clap:](":clap:")[:clap:](":clap:") Enjoy! Welcome [star](https://github.com/wangyoucao577/go-release-action/) if like it[:smile:](:smile:)     
