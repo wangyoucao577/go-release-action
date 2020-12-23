@@ -19,6 +19,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - Support optional `.sha256` along with artifacts.     
 - Customizable release tag to support publish binaries per `push`.      
 - Support overwrite assets if it's already exist.    
+- Support private repositories.     
 
 ## Usage
 
