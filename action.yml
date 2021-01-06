@@ -23,12 +23,16 @@ inputs:
     description: 'Additional arguments to pass the go build command.'
     required: false
     default: ''
+  build_package:
+    description: 'The `main` package path.'
+    required: false
+    default: '.'
   ldflags:
     description: 'Values to provide to the -ldflags argument'
     required: false
     default: ''
   project_path:
-    description: 'Where to run `go build .`'
+    description: 'Where to run `go build`'
     required: false
     default: '.'
   binary_name:  
@@ -73,6 +77,7 @@ runs:
     - ${{ inputs.goarch }}
     - ${{ inputs.goversion }}
     - ${{ inputs.build_flags}}
+    - ${{ inputs.build_package}}
     - ${{ inputs.ldflags }}
     - ${{ inputs.project_path }}
     - ${{ inputs.binary_name }}
