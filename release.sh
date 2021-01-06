@@ -32,7 +32,7 @@ if [ ${INPUT_GOOS} == 'windows' ]; then
   EXT='.exe'
 fi
 
-# prefix for ldflags 
+# prefix for ldflags
 LDFLAGS_PREFIX=''
 if [ ! -z "${INPUT_LDFLAGS}" ]; then
     LDFLAGS_PREFIX="-ldflags"
@@ -67,7 +67,7 @@ fi
 MD5_SUM=$(md5sum ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} | cut -d ' ' -f 1)
 SHA256_SUM=$(sha256sum ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} | cut -d ' ' -f 1)
 
-# prefix upload extra params 
+# prefix upload extra params
 GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS=''
 if [ ${INPUT_OVERWRITE^^} == 'TRUE' ]; then
     GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS="-overwrite"

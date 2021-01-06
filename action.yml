@@ -35,7 +35,7 @@ inputs:
     description: 'Where to run `go build`'
     required: false
     default: '.'
-  binary_name:  
+  binary_name:
     description: 'Specify another binary name if do not want to use repository basename'
     required: false
     default: ''
@@ -90,5 +90,5 @@ runs:
     - ${{ inputs.overwrite }}
 
 branding:
-  icon: 'package'  
+  icon: 'package'
   color: 'blue'
