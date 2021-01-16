@@ -17,7 +17,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - Support customize build command, e.g., use [packr2](https://github.com/gobuffalo/packr/tree/master/v2)(`packr2 build`) instead of `go build`.     
 - Support optional `.md5` along with artifacts. 
 - Support optional `.sha256` along with artifacts.     
-- Customizable release tag to support publish binaries per `push`.      
+- Customizable release tag to support publish binaries per `push` or `workflow_dispatch`(manually trigger).      
 - Support overwrite assets if it's already exist.    
 - Support private repositories.     
 
@@ -44,12 +44,6 @@ jobs:
         goos: linux
         goarch: amd64
 ```
-
-### Choose a version
-- **Prefer latest release**(**faster** & **stable**): `wangyoucao577/go-release-action@v1.11`     
-- If always want to work with newest changes:     
-  - try out **faster** pre-built master: `wangyoucao577/go-release-action@master-prebuilt`
-  - or use classic master: `wangyoucao577/go-release-action@master`
 
 ### Parameters
 
