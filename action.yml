@@ -66,7 +66,7 @@ inputs:
 
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker://ghcr.io/wangyoucao577/go-release-action:v1.13'
   args:
     - ${{ inputs.github_token }}
     - ${{ inputs.goos }}
