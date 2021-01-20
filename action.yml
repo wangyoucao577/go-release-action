@@ -63,6 +63,10 @@ inputs:
     description: "Overwrite asset if it's already exist."
     required: false
     default: 'FALSE'
+  asset_name:  
+    description: 'Customize asset name if do not want to use the default format.'
+    required: false
+    default: ''
 
 runs:
   using: 'docker'
@@ -83,6 +87,7 @@ runs:
     - ${{ inputs.sha256sum }}
     - ${{ inputs.release_tag }}
     - ${{ inputs.overwrite }}
+    - ${{ inputs.asset_name }}
 
 branding:
   icon: 'package'  
