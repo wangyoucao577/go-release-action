@@ -1,5 +1,5 @@
 # Go Release GitHub Action    
-![Build Docker](https://github.com/wangyoucao577/go-release-action/workflows/Build%20Docker/badge.svg)    
+![Build Docker](https://github.com/wangyoucao577/go-release-action/workflows/Build%20Docker/badge.svg) ![PR Build](https://github.com/wangyoucao577/go-release-action/workflows/PR%20Build/badge.svg)       
 Automatically publish `Go` binaries to Github Release Assets through Github Action.    
 
 ## Features    
@@ -17,9 +17,10 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - Support customize build command, e.g., use [packr2](https://github.com/gobuffalo/packr/tree/master/v2)(`packr2 build`) instead of `go build`.     
 - Support optional `.md5` along with artifacts. 
 - Support optional `.sha256` along with artifacts.     
-- Customizable release tag to support publish binaries per `push`.      
+- Customizable release tag to support publish binaries per `push` or `workflow_dispatch`(manually trigger).      
 - Support overwrite assets if it's already exist.    
 - Support customizable asset names.      
+- Support private repositories.     
 
 ## Usage
 
@@ -38,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: wangyoucao577/go-release-action@master
+    - uses: wangyoucao577/go-release-action@v1.13
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: linux
@@ -92,7 +93,7 @@ jobs:
         goarch: ["386", amd64]
     steps:
     - uses: actions/checkout@v2
-    - uses: wangyoucao577/go-release-action@master
+    - uses: wangyoucao577/go-release-action@v1.13
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
@@ -106,3 +107,5 @@ jobs:
 ### More Examples 
 Welcome share your usage for other people's reference!    
 - [wiki/More-Examples](https://github.com/wangyoucao577/go-release-action/wiki/More-Examples)
+
+[:clap:](":clap:")[:clap:](":clap:")[:clap:](":clap:") Enjoy! Welcome [star](https://github.com/wangyoucao577/go-release-action/) if like it[:smile:](:smile:)     
