@@ -28,7 +28,7 @@ fi
 
 # execute pre-command if exist, e.g. `go get -v ./...`
 if [ ! -z "${INPUT_PRE_COMMAND}" ]; then
-    ${INPUT_PRE_COMMAND}
+    "${INPUT_PRE_COMMAND}"
 fi
 
 # binary suffix
