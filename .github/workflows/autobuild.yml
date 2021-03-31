@@ -64,7 +64,9 @@ jobs:
         goos: [linux, windows, darwin]
         goarch: [amd64]
     steps:
-    - uses: ./
+    - name: Run go-release-action on test code
+      uses: ./
+      with:
         github_token: "FAKE-TOKEN"
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
