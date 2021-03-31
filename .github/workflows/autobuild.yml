@@ -64,6 +64,8 @@ jobs:
         goos: [linux, windows, darwin]
         goarch: [amd64]
     steps:
+    - name: Checkout
+      uses: actions/checkout@v2
     - name: Run go-release-action on test code
       uses: ./
       with:
