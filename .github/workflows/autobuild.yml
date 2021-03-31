@@ -62,7 +62,7 @@ jobs:
     strategy:
       matrix:
         goos: [linux, windows, darwin]
-        goarch: [amd64]
+        goarch: [amd64, "386"]
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -76,6 +76,7 @@ jobs:
         project_path: ./test/
         binary_name: testmain
         pre_command: go mod init localtest
+        build_flags: -v
         md5sum: false
         sha256sum: true
         overwrite: true
