@@ -56,3 +56,18 @@ jobs:
         snapshot: false
         tags: "${{ env.IMAGE_TAG }}"
 
+  basic-test:
+    name: Basic Acceptance Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: [amd64]
+    steps:
+    - uses: ./
+        github_token: "FAKE-TOKEN"
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
+        goversion: https://golang.org/dl/go1.16.2.linux-amd64.tar.gz
+        project_path: ./test/
+        binary_name: testcmd
