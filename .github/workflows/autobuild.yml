@@ -69,7 +69,7 @@ jobs:
     - name: Run go-release-action on test code
       uses: ./
       with:
-        github_token: "FAKE-TOKEN"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
         goversion: https://golang.org/dl/go1.16.2.linux-amd64.tar.gz
