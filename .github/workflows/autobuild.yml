@@ -75,3 +75,4 @@ jobs:
         goversion: https://golang.org/dl/go1.16.2.linux-amd64.tar.gz
         project_path: ./test/
         binary_name: testcmd
+        pre_command: go mod init localtest
