@@ -4,7 +4,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 
 ## Features    
 - Build `Go` binaries for release and publish to Github Release Assets.     
-- Customizable `Go` versions. `golang 1.14` by default.    
+- Customizable `Go` versions. `golang 1.16` by default.    
 - Support different `Go` project path in repository.     
 - Support multiple binaries in same repository.    
 - Customizable binary name.     
@@ -53,7 +53,7 @@ jobs:
 | github_token | **Mandatory** | Your `GITHUB_TOKEN` for uploading releases to Github asserts. |
 | goos | **Mandatory** | `GOOS` is the running program's operating system target: one of `darwin`, `freebsd`, `linux`, and so on. |
 | goarch | **Mandatory** | `GOARCH` is the running program's architecture target: one of `386`, `amd64`, `arm`, `s390x`, and so on. |
-| goversion |  **Optional** | The `Go` compiler version. `1.14` by default, optional `1.13`. <br>It also takes download URL instead of version string if you'd like to use more specified version. But make sure your URL is `linux-amd64` package, better to find the URL from [Go - Downloads](https://golang.org/dl/).<br>E.g., `https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz`. |
+| goversion |  **Optional** | The `Go` compiler version. `1.16` by default, optional `1.13`, `1.14` or `1.15`. <br>It also takes download URL instead of version string if you'd like to use more specified version. But make sure your URL is `linux-amd64` package, better to find the URL from [Go - Downloads](https://golang.org/dl/).<br>E.g., `https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz`. |
 | project_path | **Optional** | Where to run `go build`. <br>Use `.` by default. |
 | binary_name | **Optional** | Specify another binary name if do not want to use repository basename. <br>Use your repository's basename if not set. |
 | pre_command | **Optional** | Extra command that will be executed before `go build`. You may want to use it to solve dependency if you're NOT using [Go Modules](https://github.com/golang/go/wiki/Modules). |
@@ -72,7 +72,7 @@ jobs:
 - Release for multiple OS/ARCH in parallel by matrix strategy.    
 - `Go` code is not in `.` of your repository.    
 - Customize binary name.    
-- Use `go 1.13.1` from downloadable URL instead of default `1.14`.
+- Use `go 1.13.1` from downloadable URL instead of default `1.16`.
 - Package extra `LICENSE` and `README.md` into artifacts.    
 
 ```yaml
