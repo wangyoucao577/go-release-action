@@ -55,3 +55,4 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
         snapshot: false
         tags: "${{ env.IMAGE_TAG }}"
+
