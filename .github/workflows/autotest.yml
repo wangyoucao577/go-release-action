@@ -19,6 +19,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+    - name: Set BUILD_TIME env
+      run: echo BUILD_TIME=$(date) >> ${GITHUB_ENV}
     - name: Run go-release-action on test code
       uses: ./
       with:
@@ -30,6 +32,7 @@ jobs:
         binary_name: testmain
         pre_command: go mod init localtest
         build_flags: -v
+        ldflags: -X "main.buildTime=${{ env.BUILD_TIME }}" -X main.gitCommit=${{ github.sha }} -X main.gitRef=${{ github.ref }}
         md5sum: false
         sha256sum: true
         overwrite: true
