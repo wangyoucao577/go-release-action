@@ -17,6 +17,11 @@ jobs:
           - goarch: "386"
             goos: darwin 
     steps:
+    - name: Wait release docker build for release branches
+      if: contains(github.ref, 'release')
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '300s' 
     - name: Checkout
       uses: actions/checkout@v2
     - name: Set BUILD_TIME env
