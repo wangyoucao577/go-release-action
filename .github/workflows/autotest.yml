@@ -47,7 +47,7 @@ jobs:
         goos: [linux]
         goarch: [amd64]
         # "" means default
-        goversion: ["", "1.13", "https://golang.org/dl/go1.16.2.linux-amd64.tar.gz"]
+        goversion: ["", "1.13", "1.14", "1.15", "https://golang.org/dl/go1.16.1.linux-amd64.tar.gz"]
     steps:
     - name: Checkout
       uses: actions/checkout@v2
