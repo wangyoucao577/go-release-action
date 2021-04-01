@@ -1,0 +1,39 @@
+name: Test 
+
+on: 
+  push:
+    branches-ignore:
+    - '*-prebuilt'
+
+jobs:
+  acceptance-test:
+    name: Acceptance Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: [amd64, "386"]
+        exclude:  
+          - goarch: "386"
+            goos: darwin 
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Run go-release-action on test code
+      uses: ./
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
+        goversion: https://golang.org/dl/go1.16.2.linux-amd64.tar.gz
+        project_path: ./test/
+        binary_name: testmain
+        pre_command: go mod init localtest
+        build_flags: -v
+        md5sum: false
+        sha256sum: true
+        overwrite: true
+        release_tag: v0.1-test-assets
+        asset_name: testmain-${{ matrix.goos }}-${{ matrix.goarch }}
+
+      
