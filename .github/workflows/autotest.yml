@@ -37,6 +37,35 @@ jobs:
         sha256sum: true
         overwrite: true
         release_tag: v0.1-test-assets
-        asset_name: testmain-${{ matrix.goos }}-${{ matrix.goarch }}
+        asset_name: testmain-acceptance-${{ matrix.goos }}-${{ matrix.goarch }}
 
-      
+  setup-go-test:
+    name: Set up Go Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux]
+        goarch: [amd64]
+        # "" means default
+        goversion: ["", "1.13", "https://golang.org/dl/go1.16.2.linux-amd64.tar.gz"]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set GO_VERSION_TAG env
+      run: echo GO_VERSION_TAG=$(basename ${{ matrix.goversion }}) >> ${GITHUB_ENV}
+    - name: Run go-release-action on test code
+      uses: ./
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
+        goversion: ${{ matrix.goversion }}
+        project_path: ./test/
+        binary_name: testmain
+        pre_command: go mod init localtest
+        build_flags: -v
+        ldflags: -X "main.buildTime=${{ env.BUILD_TIME }}" -X main.gitCommit=${{ github.sha }} -X main.gitRef=${{ github.ref }}
+        md5sum: false
+        overwrite: true
+        release_tag: v0.1-test-assets
+        asset_name: testmain-set-up-go-${{ env.GO_VERSION_TAG }}-${{ matrix.goos }}-${{ matrix.goarch }}
