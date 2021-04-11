@@ -49,6 +49,15 @@ BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
 mkdir -p ${BUILD_ARTIFACTS_FOLDER}
 GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} -o ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}" 
 
+# executable compression
+if [[ "${INPUT_EXECUTABLE_COMPRESSION}" =~ ^upx.* ]]; then
+    # start with upx, use upx to compress the executable binary
+    "${INPUT_EXECUTABLE_COMPRESSION}" ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT}
+else
+    echo "Unsupport executable compression: ${INPUT_EXECUTABLE_COMPRESSION}!"
+    exit 1
+fi
+
 # prepare extra files
 if [ ! -z "${INPUT_EXTRA_FILES}" ]; then
   cd ${GITHUB_WORKSPACE}
