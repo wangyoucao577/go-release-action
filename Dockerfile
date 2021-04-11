@@ -8,9 +8,15 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteract
   build-essential \
   zip \
   jq \
-  upx-ucl \
   ca-certificates \
   && rm -rf /var/lib/apt/lists/*
+
+# install latest upx 3.96 by wget instead of `apt install upx-ucl`(only 3.95) 
+RUN wget --no-check-certificate --progress=dot:mega https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz && \
+  tar -Jxf upx-3.96-amd64_linux.tar.xz && \
+  mv upx-3.96-amd64_linux /usr/local/ && \
+  ln -s /usr/local/upx-3.96-amd64_linux/upx /usr/local/bin/upx && \
+  upx --version 
 
 # github-assets-uploader to provide robust github assets upload
 RUN wget --no-check-certificate --progress=dot:mega https://github.com/wangyoucao577/assets-uploader/releases/download/v0.3.0/github-assets-uploader-v0.3.0-linux-amd64.tar.gz -O github-assets-uploader.tar.gz && \
