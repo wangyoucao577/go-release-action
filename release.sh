@@ -50,12 +50,14 @@ mkdir -p ${BUILD_ARTIFACTS_FOLDER}
 GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} -o ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}" 
 
 # executable compression
+if [ ! -z "${INPUT_EXECUTABLE_COMPRESSION}" ]; then
 if [[ "${INPUT_EXECUTABLE_COMPRESSION}" =~ ^upx.* ]]; then
     # start with upx, use upx to compress the executable binary
-    "${INPUT_EXECUTABLE_COMPRESSION}" ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT}
+    eval ${INPUT_EXECUTABLE_COMPRESSION} ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT}
 else
     echo "Unsupport executable compression: ${INPUT_EXECUTABLE_COMPRESSION}!"
     exit 1
+fi
 fi
 
 # prepare extra files
