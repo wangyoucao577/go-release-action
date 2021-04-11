@@ -36,6 +36,7 @@ jobs:
         project_path: ./test/
         binary_name: testmain
         pre_command: go mod init localtest
+        executable_compression: upx -v
         build_flags: -v
         ldflags: -X "main.buildTime=${{ env.BUILD_TIME }}" -X main.gitCommit=${{ github.sha }} -X main.gitRef=${{ github.ref }}
         md5sum: false
