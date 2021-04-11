@@ -21,6 +21,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - Support overwrite assets if it's already exist.    
 - Support customizable asset names.      
 - Support private repositories.     
+- Support executable compression by [upx](https://github.com/upx/upx).       
 
 ## Usage
 
@@ -58,6 +59,7 @@ jobs:
 | binary_name | **Optional** | Specify another binary name if do not want to use repository basename. <br>Use your repository's basename if not set. |
 | pre_command | **Optional** | Extra command that will be executed before `go build`. You may want to use it to solve dependency if you're NOT using [Go Modules](https://github.com/golang/go/wiki/Modules). |
 | build_command | **Optional** | The actual command to build binary, typically `go build`. You may want to use other command wrapper, e.g., [packr2](https://github.com/gobuffalo/packr/tree/master/v2), example `build_command: 'packr2 build'`. Remember to use `pre_command` to set up `packr2` command in this scenario.|
+| executable_compression | **Optional** | Compression executable binary by some third-party tools. It takes compression command with optional args as input, e.g., `upx` or `upx -v`. <br>Only [upx](https://github.com/upx/upx) is supported at the moment.|
 | build_flags | **Optional** | Additional arguments to pass the `go build` command. |
 | ldflags | **Optional** | Values to provide to the `-ldflags` argument. |
 | extra_files | **Optional** | Extra files that will be packaged into artifacts either. Multiple files separated by space. Note that extra folders can be allowed either since internal `cp -r` already in use. <br>E.g., `extra_files: LICENSE README.md` |

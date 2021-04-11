@@ -44,7 +44,7 @@ inputs:
     required: false
     default: 'go build'
   executable_compression:
-    description: 'Compression executable binary by some third-party tools. Only support `upx` at the moment.'
+    description: 'Compression executable binary by some third-party tools. Only `upx` is supported at the moment.'
     required: false
     default: ''
   extra_files:
