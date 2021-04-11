@@ -8,6 +8,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteract
   build-essential \
   zip \
   jq \
+  upx-ucl \
   ca-certificates \
   && rm -rf /var/lib/apt/lists/*
 
