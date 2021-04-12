@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: wangyoucao577/go-release-action@v1.16
+    - uses: wangyoucao577/go-release-action@v1.17
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: linux
@@ -98,7 +98,7 @@ jobs:
             goos: darwin 
     steps:
     - uses: actions/checkout@v2
-    - uses: wangyoucao577/go-release-action@v1.16
+    - uses: wangyoucao577/go-release-action@v1.17
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
