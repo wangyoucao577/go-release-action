@@ -76,9 +76,9 @@ MEDIA_TYPE='application/gzip'
 if [ ${INPUT_GOOS} == 'windows' ]; then
 RELEASE_ASSET_EXT='.zip'
 MEDIA_TYPE='application/zip'
-zip -vr ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} *
+( shopt -s dotglob; zip -vr ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} * )
 else
-tar cvfz ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} *
+( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} * )
 fi
 MD5_SUM=$(md5sum ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} | cut -d ' ' -f 1)
 SHA256_SUM=$(sha256sum ${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT} | cut -d ' ' -f 1)
