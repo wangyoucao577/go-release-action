@@ -50,8 +50,10 @@ cd ${INPUT_PROJECT_PATH}
 if [[ "${INPUT_BUILD_COMMAND}" =~ ^make.* ]]; then
     # start with make, assumes using make to build golang binaries, execute it directly
     GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND}
-    # assumes the binary will be generated in current dir, copy it for later processes
-    cp ${BINARY_NAME}${EXT} ${BUILD_ARTIFACTS_FOLDER}/
+    if [ -f "${BINARY_NAME}${EXT}" ]; then
+        # assumes the binary will be generated in current dir, copy it for later processes
+        cp ${BINARY_NAME}${EXT} ${BUILD_ARTIFACTS_FOLDER}/
+    fi
 else
     GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} -o ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}" 
 fi
