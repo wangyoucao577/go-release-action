@@ -9,7 +9,7 @@ LDFLAGS += -X main.gitRef=${GIT_COMMIT}
 LDFLAGS += -X "main.buildTime=${BUILD_TIME}"
 LDFLAGS += $(EXT_LDFLAGS)
 
-BUILD_PATH = build
+
 
 all: app
 
@@ -18,8 +18,8 @@ test: fmt vet
 	go test ./... -coverprofile cover.out
 
 # Build friendly-yaml binary
-app: fmt vet md
-	go build -o ${BUILD_PATH}/testmain -ldflags '$(LDFLAGS)' ./test_main.go
+app: fmt vet
+	mkdir -p build && go build -o build/testmain -ldflags '$(LDFLAGS)' ./test_main.go
 
 # Run go fmt against code
 fmt:
@@ -28,7 +28,3 @@ fmt:
 # Run go vet against code
 vet:
 	go vet ./...
-
-# Create build folder
-md:
-	mkdir -p ${BUILD_PATH}
