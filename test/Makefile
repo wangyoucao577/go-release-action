@@ -19,7 +19,7 @@ test: fmt vet
 
 # Build friendly-yaml binary
 app: fmt vet
-	mkdir -p build && go build -o build/testmain -ldflags '$(LDFLAGS)' ./test_main.go
+	go build -o testmain -ldflags '$(LDFLAGS)' ./test_main.go
 
 # Run go fmt against code
 fmt:

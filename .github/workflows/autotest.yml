@@ -101,7 +101,7 @@ jobs:
         project_path: ./test/
         binary_name: testmain
         pre_command: go mod init localtest
-        build_command: make app && cp build/testmain ./test/
+        build_command: make app
         md5sum: false
         sha256sum: false
         overwrite: true
