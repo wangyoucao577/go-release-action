@@ -44,10 +44,20 @@ if [ ! -z "${INPUT_LDFLAGS}" ]; then
 fi
 
 # build
-cd ${INPUT_PROJECT_PATH}
 BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
-mkdir -p ${BUILD_ARTIFACTS_FOLDER}
-GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} -o ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}" 
+mkdir -p ${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}
+cd ${INPUT_PROJECT_PATH}
+if [[ "${INPUT_BUILD_COMMAND}" =~ ^make.* ]]; then
+    # start with make, assumes using make to build golang binaries, execute it directly
+    GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} eval ${INPUT_BUILD_COMMAND}
+    if [ -f "${BINARY_NAME}${EXT}" ]; then
+        # assumes the binary will be generated in current dir, copy it for later processes
+        cp ${BINARY_NAME}${EXT} ${BUILD_ARTIFACTS_FOLDER}/
+    fi
+else
+    GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} -o ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}" 
+fi
+
 
 # executable compression
 if [ ! -z "${INPUT_EXECUTABLE_COMPRESSION}" ]; then
