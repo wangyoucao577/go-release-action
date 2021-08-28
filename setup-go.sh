@@ -1,8 +1,7 @@
 #!/bin/bash -eux
 
 GO_LINUX_PACKAGE_URL="https://golang.org/dl/go1.17.linux-amd64.tar.gz"
-if [[ ${INPUT_GOVERSION} == "1.17" ]]; then
-elif [[ ${INPUT_GOVERSION} == "1.16" ]]; then
+if [[ ${INPUT_GOVERSION} == "1.16" ]]; then
     GO_LINUX_PACKAGE_URL="https://golang.org/dl/go1.16.7.linux-amd64.tar.gz"
 elif [[ ${INPUT_GOVERSION} == "1.15" ]]; then
     GO_LINUX_PACKAGE_URL="https://golang.org/dl/go1.15.10.linux-amd64.tar.gz"
