@@ -53,7 +53,7 @@ jobs:
         goos: [linux]
         goarch: [amd64]
         # "" means default
-        goversion: ["", "1.13", "1.14", "1.15", "https://golang.org/dl/go1.16.1.linux-amd64.tar.gz"]
+        goversion: ["", "1.13", "1.14", "1.15", "1.16", "1.17", "https://golang.org/dl/go1.16.1.linux-amd64.tar.gz"]
     steps:
     # - name: Wait release docker build for release branches
     #  if: contains(github.ref, 'release')
