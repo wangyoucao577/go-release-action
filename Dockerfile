@@ -19,7 +19,7 @@ RUN wget --no-check-certificate --progress=dot:mega https://github.com/upx/upx/r
   upx --version 
 
 # github-assets-uploader to provide robust github assets upload
-RUN wget --no-check-certificate --progress=dot:mega https://github.com/wangyoucao577/assets-uploader/releases/download/v0.4.0/github-assets-uploader-v0.4.0-linux-amd64.tar.gz -O github-assets-uploader.tar.gz && \
+RUN wget --no-check-certificate --progress=dot:mega https://github.com/wangyoucao577/assets-uploader/releases/download/v0.5.0/github-assets-uploader-v0.5.0-linux-amd64.tar.gz -O github-assets-uploader.tar.gz && \
   tar -zxf github-assets-uploader.tar.gz && \
   mv github-assets-uploader /usr/sbin/ && \
   rm -f github-assets-uploader.tar.gz && \
