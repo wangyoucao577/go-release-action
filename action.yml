@@ -71,6 +71,10 @@ inputs:
     description: 'Customize asset name if do not want to use the default format.'
     required: false
     default: ''
+  retry:  
+    description: 'How many times retrying if upload fails.'
+    required: false
+    default: '3'
 
 runs:
   using: 'docker'
@@ -93,6 +97,7 @@ runs:
     - ${{ inputs.release_tag }}
     - ${{ inputs.overwrite }}
     - ${{ inputs.asset_name }}
+    - ${{ inputs.retry }}
 
 branding:
   icon: 'package'  
