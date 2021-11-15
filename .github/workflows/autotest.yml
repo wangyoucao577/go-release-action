@@ -44,6 +44,7 @@ jobs:
         overwrite: true
         release_tag: v0.1-test-assets
         asset_name: testmain-acceptance-${{ matrix.goos }}-${{ matrix.goarch }}
+        retry: 5
 
   setup-go-test:
     name: Set up Go Test
