@@ -54,7 +54,7 @@ jobs:
 | --------- | -------- | ----------- |
 | github_token | **Mandatory** | Your `GITHUB_TOKEN` for uploading releases to Github asserts. |
 | goos | **Mandatory** | `GOOS` is the running program's operating system target: one of `darwin`, `freebsd`, `linux`, and so on. |
-| goarch | **Mandatory** | `GOARCH` is the running program's architecture target: one of `386`, `amd64`, `arm`, `s390x`, and so on. |
+| goarch | **Mandatory** | `GOARCH` is the running program's architecture target: one of `386`, `amd64`, `arm`, `arm64`, `s390x`, and so on. |
 | goversion |  **Optional** | The `Go` compiler version. `latest`([check it here](https://golang.org/VERSION?m=text)) by default, optional `1.13`, `1.14`, `1.15`, `1.16` or `1.17`. <br>It also takes download URL instead of version string if you'd like to use more specified version. But make sure your URL is `linux-amd64` package, better to find the URL from [Go - Downloads](https://golang.org/dl/).<br>E.g., `https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz`. |
 | project_path | **Optional** | Where to run `go build`. <br>Use `.` by default. |
 | binary_name | **Optional** | Specify another binary name if do not want to use repository basename. <br>Use your repository's basename if not set. |
@@ -92,12 +92,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # build and publish in parallel: linux/386, linux/amd64, windows/386, windows/amd64, darwin/amd64 
+        # build and publish in parallel: linux/386, linux/amd64, linux/arm64, windows/386, windows/amd64, darwin/amd64, darwin/arm64
         goos: [linux, windows, darwin]
-        goarch: ["386", amd64]
+        goarch: ["386", amd64, arm64]
         exclude:  
           - goarch: "386"
             goos: darwin 
+          - goarch: arm64
+            goos: windows 
     steps:
     - uses: actions/checkout@v2
     - uses: wangyoucao577/go-release-action@v1.21
