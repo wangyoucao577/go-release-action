@@ -1,6 +1,6 @@
-name: Test 
+name: Test
 
-on: 
+on:
   push:
     branches-ignore:
     - '*-prebuilt'
@@ -13,9 +13,9 @@ jobs:
       matrix:
         goos: [linux, windows, darwin]
         goarch: [amd64, "386", arm64]
-        exclude:  
+        exclude:
           - goarch: "386"
-            goos: darwin 
+            goos: darwin
           - goarch: arm64
             goos: windows
     steps:
@@ -23,7 +23,7 @@ jobs:
     #   if: contains(github.ref, 'release')
     #   uses: jakejarvis/wait-action@master
     #   with:
-    #     time: '300s' 
+    #     time: '300s'
     - name: Checkout
       uses: actions/checkout@v2
     - name: Set BUILD_TIME env
@@ -47,6 +47,7 @@ jobs:
         release_tag: v0.1-test-assets
         asset_name: testmain-acceptance-${{ matrix.goos }}-${{ matrix.goarch }}
         retry: 5
+        post_command: echo "RELEASE_ASSET_FILE=$RELEASE_ASSET_FILE"
 
   setup-go-test:
     name: Set up Go Test
@@ -62,7 +63,7 @@ jobs:
     #  if: contains(github.ref, 'release')
     #  uses: jakejarvis/wait-action@master
     #  with:
-    #    time: '300s' 
+    #    time: '300s'
     - name: Checkout
       uses: actions/checkout@v2
     - name: Set GO_VERSION_TAG env

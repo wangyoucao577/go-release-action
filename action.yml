@@ -31,7 +31,7 @@ inputs:
     description: 'Where to run `go build .`'
     required: false
     default: '.'
-  binary_name:  
+  binary_name:
     description: 'Specify another binary name if do not want to use repository basename'
     required: false
     default: ''
@@ -67,14 +67,18 @@ inputs:
     description: "Overwrite asset if it's already exist."
     required: false
     default: 'FALSE'
-  asset_name:  
+  asset_name:
     description: 'Customize asset name if do not want to use the default format.'
     required: false
     default: ''
-  retry:  
+  retry:
     description: 'How many times retrying if upload fails.'
     required: false
     default: '3'
+  post_command:
+    description: 'Extra command that will be executed for teardown work'
+    required: false
+    default: ''
 
 runs:
   using: 'docker'
@@ -98,7 +102,8 @@ runs:
     - ${{ inputs.overwrite }}
     - ${{ inputs.asset_name }}
     - ${{ inputs.retry }}
+    - ${{ inputs.post_command }}
 
 branding:
-  icon: 'package'  
+  icon: 'package'
   color: 'blue'
