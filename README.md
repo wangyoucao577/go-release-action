@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: wangyoucao577/go-release-action@v1.22
+    - uses: wangyoucao577/go-release-action@v1.23
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: linux
@@ -103,7 +103,7 @@ jobs:
             goos: windows
     steps:
     - uses: actions/checkout@v2
-    - uses: wangyoucao577/go-release-action@v1.22
+    - uses: wangyoucao577/go-release-action@v1.23
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
