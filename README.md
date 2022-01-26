@@ -1,28 +1,28 @@
-# Go Release GitHub Action    
-![Build Docker](https://github.com/wangyoucao577/go-release-action/workflows/Build%20Docker/badge.svg) ![PR Build](https://github.com/wangyoucao577/go-release-action/workflows/PR%20Build/badge.svg) [![Test](https://github.com/wangyoucao577/go-release-action/actions/workflows/autotest.yml/badge.svg)](https://github.com/wangyoucao577/go-release-action/actions/workflows/autotest.yml)       
-Automatically publish `Go` binaries to Github Release Assets through Github Action.    
+# Go Release GitHub Action
+![Build Docker](https://github.com/wangyoucao577/go-release-action/workflows/Build%20Docker/badge.svg) ![PR Build](https://github.com/wangyoucao577/go-release-action/workflows/PR%20Build/badge.svg) [![Test](https://github.com/wangyoucao577/go-release-action/actions/workflows/autotest.yml/badge.svg)](https://github.com/wangyoucao577/go-release-action/actions/workflows/autotest.yml)
+Automatically publish `Go` binaries to Github Release Assets through Github Action.
 
-## Features    
-- Build `Go` binaries for release and publish to Github Release Assets.     
-- Customizable `Go` versions. `latest` by default.    
-- Support different `Go` project path in repository.     
-- Support multiple binaries in same repository.    
-- Customizable binary name.     
-- Support multiple `GOOS`/`GOARCH` build in parallel by [Github Action Matrix Strategy](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategymatrix) gracefully.         
-- Publish `.zip` instead of `.tar.gz` for `windows`.     
-- No `musl` library dependency issue on `linux`.     
-- Support extra command that will be executed before `go build`. You may want to use it to solve dependency if you're NOT using [Go Modules](https://github.com/golang/go/wiki/Modules).       
-- Rich parameters support for `go build`(e.g. `-ldflags`, etc.).     
-- Support package extra files into artifacts (e.g., `LICENSE`, `README.md`, etc).    
-- Support customize build command, e.g., use [packr2](https://github.com/gobuffalo/packr/tree/master/v2)(`packr2 build`) instead of `go build`. Another important usage is to use `make`(`Makefile`) for building on Unix-like systems.          
-- Support optional `.md5` along with artifacts. 
-- Support optional `.sha256` along with artifacts.     
-- Customizable release tag to support publish binaries per `push` or `workflow_dispatch`(manually trigger).      
-- Support overwrite assets if it's already exist.    
-- Support customizable asset names.      
-- Support private repositories.     
-- Support executable compression by [upx](https://github.com/upx/upx).       
-- Support retry if upload phase fails.     
+## Features
+- Build `Go` binaries for release and publish to Github Release Assets.
+- Customizable `Go` versions. `latest` by default.
+- Support different `Go` project path in repository.
+- Support multiple binaries in same repository.
+- Customizable binary name.
+- Support multiple `GOOS`/`GOARCH` build in parallel by [Github Action Matrix Strategy](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategymatrix) gracefully.
+- Publish `.zip` instead of `.tar.gz` for `windows`.
+- No `musl` library dependency issue on `linux`.
+- Support extra command that will be executed before `go build`. You may want to use it to solve dependency if you're NOT using [Go Modules](https://github.com/golang/go/wiki/Modules).
+- Rich parameters support for `go build`(e.g. `-ldflags`, etc.).
+- Support package extra files into artifacts (e.g., `LICENSE`, `README.md`, etc).
+- Support customize build command, e.g., use [packr2](https://github.com/gobuffalo/packr/tree/master/v2)(`packr2 build`) instead of `go build`. Another important usage is to use `make`(`Makefile`) for building on Unix-like systems.
+- Support optional `.md5` along with artifacts.
+- Support optional `.sha256` along with artifacts.
+- Customizable release tag to support publish binaries per `push` or `workflow_dispatch`(manually trigger).
+- Support overwrite assets if it's already exist.
+- Support customizable asset names.
+- Support private repositories.
+- Support executable compression by [upx](https://github.com/upx/upx).
+- Support retry if upload phase fails.
 
 ## Usage
 
@@ -31,7 +31,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 ```yaml
 # .github/workflows/release.yaml
 
-on: 
+on:
   release:
     types: [created]
 
@@ -50,7 +50,7 @@ jobs:
 
 ### Parameters
 
-| Parameter | **Mandatory**/**Optional** | Description | 
+| Parameter | **Mandatory**/**Optional** | Description |
 | --------- | -------- | ----------- |
 | github_token | **Mandatory** | Your `GITHUB_TOKEN` for uploading releases to Github asserts. |
 | goos | **Mandatory** | `GOOS` is the running program's operating system target: one of `darwin`, `freebsd`, `linux`, and so on. |
@@ -70,19 +70,20 @@ jobs:
 | overwrite | **Optional** | Overwrite asset if it's already exist. `FALSE` by default. |
 | asset_name | **Optional** | Customize asset name if do not want to use the default format `${BINARY_NAME}-${RELEASE_TAG}-${GOOS}-${GOARCH}`. <br>Make sure set it correctly, especially for matrix usage that you have to append `-${{ matrix.goos }}-${{ matrix.goarch }}`. A valid example could be  `asset_name: binary-name-${{ matrix.goos }}-${{ matrix.goarch }}`. |
 | retry | **Optional** | How many times retrying if upload fails. `3` by default. |
+| post_command | **Optional** | Extra command that will be executed for teardown work. e.g. you can use it to upload artifacts to AWS s3 or aliyun OSS |
 
 ### Advanced Example
 
-- Release for multiple OS/ARCH in parallel by matrix strategy.    
-- `Go` code is not in `.` of your repository.    
-- Customize binary name.    
+- Release for multiple OS/ARCH in parallel by matrix strategy.
+- `Go` code is not in `.` of your repository.
+- Customize binary name.
 - Use `go 1.13.1` from downloadable URL instead of the default version.
-- Package extra `LICENSE` and `README.md` into artifacts.    
+- Package extra `LICENSE` and `README.md` into artifacts.
 
 ```yaml
 # .github/workflows/release.yaml
 
-on: 
+on:
   release:
     types: [created]
 
@@ -95,11 +96,11 @@ jobs:
         # build and publish in parallel: linux/386, linux/amd64, linux/arm64, windows/386, windows/amd64, darwin/amd64, darwin/arm64
         goos: [linux, windows, darwin]
         goarch: ["386", amd64, arm64]
-        exclude:  
+        exclude:
           - goarch: "386"
-            goos: darwin 
+            goos: darwin
           - goarch: arm64
-            goos: windows 
+            goos: windows
     steps:
     - uses: actions/checkout@v2
     - uses: wangyoucao577/go-release-action@v1.22
@@ -113,8 +114,8 @@ jobs:
         extra_files: LICENSE README.md
 ```
 
-### More Examples 
-Welcome share your usage for other people's reference!    
+### More Examples
+Welcome share your usage for other people's reference!
 - [wiki/More-Examples](https://github.com/wangyoucao577/go-release-action/wiki/More-Examples)
 
-[:clap:](":clap:")[:clap:](":clap:")[:clap:](":clap:") Enjoy! Welcome [star](https://github.com/wangyoucao577/go-release-action/) if like it[:smile:](:smile:)     
+[:clap:](":clap:")[:clap:](":clap:")[:clap:](":clap:") Enjoy! Welcome [star](https://github.com/wangyoucao577/go-release-action/) if like it[:smile:](:smile:)
