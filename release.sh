@@ -87,6 +87,7 @@ RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
 if [ ${INPUT_GOOS} == 'windows' ]; then
 RELEASE_ASSET_EXT='.zip'
 MEDIA_TYPE='application/zip'
+RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
 ( shopt -s dotglob; zip -vr ${RELEASE_ASSET_FILE} * )
 else
 ( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_FILE} * )
