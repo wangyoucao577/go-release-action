@@ -7,7 +7,9 @@ if [ x${INPUT_BINARY_NAME} != x ]; then
 fi
 RELEASE_TAG=$(basename ${GITHUB_REF})
 if [ ! -z "${INPUT_RELEASE_TAG}" ]; then
-    RELEASE_TAG=${INPUT_RELEASE_TAG}
+  RELEASE_TAG=${INPUT_RELEASE_TAG}
+elif [ ! -z "${INPUT_RELEASE_NAME}" ]; then # prevent upload-asset by tag due to github-ref default if a name is given
+  RELEASE_TAG=""
 fi
 
 RELEASE_NAME=${INPUT_RELEASE_NAME}
