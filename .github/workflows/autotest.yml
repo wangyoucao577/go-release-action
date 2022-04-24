@@ -13,6 +13,7 @@ jobs:
       matrix:
         goos: [linux, windows, darwin]
         goarch: [amd64, "386", arm64]
+        goamd64: [v1, v2, v3, v4]
         exclude:
           - goarch: "386"
             goos: darwin
@@ -34,6 +35,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
+        goamd64: ${{ matrix.goamd64 }}
         goversion: https://go.dev/dl/go1.16.2.linux-amd64.tar.gz
         project_path: ./test/
         binary_name: testmain
