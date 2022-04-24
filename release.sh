@@ -52,11 +52,19 @@ if [ ! -z "${INPUT_LDFLAGS}" ]; then
 fi
 
 # fulfill GOAMD64 option
-if [[ "${INPUT_GOARCH}" =~ amd64 ]]; then
-    GOAMD64_FLAG="GOAMD64=${INPUT_GOAMD64}"
+if [ ! -z "${INPUT_GOAMD64}" ]; then
+    if [[ "${INPUT_GOARCH}" =~ amd64 ]]; then
+        GOAMD64_FLAG="GOAMD64=${INPUT_GOAMD64}"
+    else
+        echo "GOAMD64 should only be use with amd64 arch." >>/dev/stderr
+        GOAMD64_FLAG=""
+    fi
 else
-    echo "GOAMD64 should only be use with amd64 arch."
-    GOAMD64_FLAG=""
+    if [[ "${INPUT_GOARCH}" =~ amd64 ]]; then
+        GOAMD64_FLAG="GOAMD64=v1"
+    else
+        GOAMD64_FLAG=""
+    fi
 fi
 
 # build
