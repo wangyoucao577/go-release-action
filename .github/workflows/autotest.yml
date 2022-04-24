@@ -19,6 +19,9 @@ jobs:
             goos: darwin
           - goarch: arm64
             goos: windows
+          - goarch: ["386", arm64]
+            goamd64: [v1, v2, v3, v4]
+
     steps:
     # - name: Wait release docker build for release branches
     #   if: contains(github.ref, 'release')
