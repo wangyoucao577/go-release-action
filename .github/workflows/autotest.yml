@@ -13,15 +13,15 @@ jobs:
       matrix:
         goos: [linux, windows, darwin]
         goarch: [amd64, "386", arm64]
-        goamd64: [v1, v2, v3, v4]
         exclude:
           - goarch: "386"
             goos: darwin
           - goarch: arm64
             goos: windows
-          - goarch: ["386", arm64]
-            goamd64: [v1, v2, v3, v4]
-
+        include:
+          - goamd64: [v1, v2, v3, v4]
+            goos: [linux, windows, darwin]
+            goarch: [amd64]
     steps:
     # - name: Wait release docker build for release branches
     #   if: contains(github.ref, 'release')
