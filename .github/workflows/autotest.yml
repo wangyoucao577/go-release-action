@@ -19,9 +19,18 @@ jobs:
           - goarch: arm64
             goos: windows
         include:
-          - goamd64: [v1, v2, v3, v4]
-            goos: [linux, windows, darwin]
-            goarch: [amd64]
+          - goos: linux
+            goarch: amd64
+            goamd64: v1
+          - goos: linux
+            goarch: amd64
+            goamd64: v3
+          - goos: windows
+            goarch: amd64
+            goamd64: v1
+          - goos: windows
+            goarch: amd64
+            goamd64: v3
     steps:
     # - name: Wait release docker build for release branches
     #   if: contains(github.ref, 'release')
