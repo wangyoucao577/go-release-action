@@ -55,6 +55,7 @@ jobs:
 | github_token | **Mandatory** | Your `GITHUB_TOKEN` for uploading releases to Github assets. |
 | goos | **Mandatory** | `GOOS` is the running program's operating system target: one of `darwin`, `freebsd`, `linux`, and so on. |
 | goarch | **Mandatory** | `GOARCH` is the running program's architecture target: one of `386`, `amd64`, `arm`, `arm64`, `s390x`, and so on. |
+| goamd64 | **Optional** | `GOAMD64` is the running programs amd64 microarchitecture level, should only be used when `GOARCH` is `amd64`: one of `v1`, `v2`, `v3`, `v4`. |
 | goversion |  **Optional** | The `Go` compiler version. `latest`([check it here](https://go.dev/VERSION?m=text)) by default, optional `1.13`, `1.14`, `1.15`, `1.16` or `1.17`. <br>It also takes download URL instead of version string if you'd like to use more specified version. But make sure your URL is `linux-amd64` package, better to find the URL from [Go - Downloads](https://go.dev/dl/).<br>E.g., `https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz`. |
 | project_path | **Optional** | Where to run `go build`. <br>Use `.` by default. |
 | binary_name | **Optional** | Specify another binary name if do not want to use repository basename. <br>Use your repository's basename if not set. |

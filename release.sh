@@ -15,6 +15,9 @@ fi
 RELEASE_NAME=${INPUT_RELEASE_NAME}
 
 RELEASE_ASSET_NAME=${BINARY_NAME}-${RELEASE_TAG}-${INPUT_GOOS}-${INPUT_GOARCH}
+if [ ! -z "${INPUT_GOAMD64}" ]; then
+    RELEASE_ASSET_NAME=${BINARY_NAME}-${RELEASE_TAG}-${INPUT_GOOS}-${INPUT_GOARCH}-${INPUT_GOAMD64}
+fi
 if [ ! -z "${INPUT_ASSET_NAME}" ]; then
     RELEASE_ASSET_NAME=${INPUT_ASSET_NAME}
 fi
@@ -48,19 +51,35 @@ if [ ! -z "${INPUT_LDFLAGS}" ]; then
     LDFLAGS_PREFIX="-ldflags"
 fi
 
+# fulfill GOAMD64 option
+if [ ! -z "${INPUT_GOAMD64}" ]; then
+    if [[ "${INPUT_GOARCH}" =~ amd64 ]]; then
+        GOAMD64_FLAG="${INPUT_GOAMD64}"
+    else
+        echo "GOAMD64 should only be use with amd64 arch." >>/dev/stderr
+        GOAMD64_FLAG=""
+    fi
+else
+    if [[ "${INPUT_GOARCH}" =~ amd64 ]]; then
+        GOAMD64_FLAG="v1"
+    else
+        GOAMD64_FLAG=""
+    fi
+fi
+
 # build
 BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
 mkdir -p ${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}
 cd ${INPUT_PROJECT_PATH}
 if [[ "${INPUT_BUILD_COMMAND}" =~ ^make.* ]]; then
     # start with make, assumes using make to build golang binaries, execute it directly
-    GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} eval ${INPUT_BUILD_COMMAND}
+    GOAMD64=${GOAMD64_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} eval ${INPUT_BUILD_COMMAND}
     if [ -f "${BINARY_NAME}${EXT}" ]; then
         # assumes the binary will be generated in current dir, copy it for later processes
         cp ${BINARY_NAME}${EXT} ${BUILD_ARTIFACTS_FOLDER}/
     fi
 else
-    GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} -o ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}"
+    GOAMD64=${GOAMD64_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} -o ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}"
 fi
 
 

@@ -18,6 +18,23 @@ jobs:
             goos: darwin
           - goarch: arm64
             goos: windows
+          - goarch: amd64
+            goos: linux
+          - goarch: amd64
+            goos: windows
+        include:
+          - goos: linux
+            goarch: amd64
+            goamd64: v1
+          - goos: linux
+            goarch: amd64
+            goamd64: v3
+          - goos: windows
+            goarch: amd64
+            goamd64: v1
+          - goos: windows
+            goarch: amd64
+            goamd64: v3
     steps:
     # - name: Wait release docker build for release branches
     #   if: contains(github.ref, 'release')
@@ -34,6 +51,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
+        goamd64: ${{ matrix.goamd64 }}
         goversion: https://go.dev/dl/go1.16.2.linux-amd64.tar.gz
         project_path: ./test/
         binary_name: testmain
