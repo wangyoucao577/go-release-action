@@ -104,17 +104,22 @@ fi
 cd ${BUILD_ARTIFACTS_FOLDER}
 ls -lha
 
-# compress and package binary, then calculate checksum
-RELEASE_ASSET_EXT='.tar.gz'
-MEDIA_TYPE='application/gzip'
-RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-if [ ${INPUT_GOOS} == 'windows' ]; then
-RELEASE_ASSET_EXT='.zip'
-MEDIA_TYPE='application/zip'
-RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-( shopt -s dotglob; zip -vr ${RELEASE_ASSET_FILE} * )
+if [ ${INPUT_COMPRESS_ASSETS^^} == 'TRUE' ]; then
+  # compress and package binary, then calculate checksum
+  RELEASE_ASSET_EXT='.tar.gz'
+  MEDIA_TYPE='application/gzip'
+  RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
+  if [ ${INPUT_GOOS} == 'windows' ]; then
+    RELEASE_ASSET_EXT='.zip'
+    MEDIA_TYPE='application/zip'
+    RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
+    ( shopt -s dotglob; zip -vr ${RELEASE_ASSET_FILE} * )
+  else
+    ( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_FILE} * )
+  fi
 else
-( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_FILE} * )
+  RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}
+  MEDIA_TYPE="application/octet-stream"
 fi
 MD5_SUM=$(md5sum ${RELEASE_ASSET_FILE} | cut -d ' ' -f 1)
 SHA256_SUM=$(sha256sum ${RELEASE_ASSET_FILE} | cut -d ' ' -f 1)

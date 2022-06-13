@@ -88,6 +88,11 @@ inputs:
     required: false
     default: ''
 
+  compress_assets:
+    description: 'Compress assets before uploading'
+    required: false
+    default: 'TRUE'
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -112,6 +117,7 @@ runs:
     - ${{ inputs.asset_name }}
     - ${{ inputs.retry }}
     - ${{ inputs.post_command }}
+    - ${{ inputs.compress_assets }}
 
 branding:
   icon: 'package'
