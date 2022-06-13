@@ -9,7 +9,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - Support multiple binaries in same repository.
 - Customizable binary name.
 - Support multiple `GOOS`/`GOARCH` build in parallel by [Github Action Matrix Strategy](https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategymatrix) gracefully.
-- Publish `.zip` instead of `.tar.gz` for `windows`.
+- Publish `.zip` for `windows` and `.tar.gz` for Unix-like OS by default, optionally to disable the compression.
 - No `musl` library dependency issue on `linux`.
 - Support extra command that will be executed before `go build`. You may want to use it to solve dependency if you're NOT using [Go Modules](https://github.com/golang/go/wiki/Modules).
 - Rich parameters support for `go build`(e.g. `-ldflags`, etc.).
@@ -22,7 +22,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - Support customizable asset names.
 - Support private repositories.
 - Support executable compression by [upx](https://github.com/upx/upx).
-- Support retry if upload phase fails.
+- Support retry if upload phase fails.    
 
 ## Usage
 
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: wangyoucao577/go-release-action@v1.28
+    - uses: wangyoucao577/go-release-action@v1.29
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: linux
@@ -105,7 +105,7 @@ jobs:
             goos: windows
     steps:
     - uses: actions/checkout@v3
-    - uses: wangyoucao577/go-release-action@v1.28
+    - uses: wangyoucao577/go-release-action@v1.29
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
