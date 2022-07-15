@@ -87,7 +87,6 @@ inputs:
     description: 'Extra command that will be executed for teardown work'
     required: false
     default: ''
-
   compress_assets:
     description: 'Compress assets before uploading'
     required: false
