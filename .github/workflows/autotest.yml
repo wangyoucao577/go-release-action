@@ -150,8 +150,6 @@ jobs:
         binary_name: testmain
         pre_command: go mod init localtest
         build_flags: -v
-        ldflags: -X "main.buildTime=${{ env.BUILD_TIME }}" -X main.gitCommit=${{ github.sha }} -X main.gitRef=${{ github.ref }}
         overwrite: true
         release_tag: v0.1-test-assets
-        asset_name: testmain-set-up-go-${{ env.GO_VERSION_TAG }}-${{ matrix.goos }}-${{ matrix.goarch }}
         compress_assets: false
