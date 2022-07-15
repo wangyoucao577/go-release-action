@@ -118,8 +118,10 @@ if [ ${INPUT_COMPRESS_ASSETS^^} == 'TRUE' ]; then
     ( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_FILE} * )
   fi
 else
-  RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}
+  RELEASE_ASSET_EXT=${EXT}
   MEDIA_TYPE="application/octet-stream"
+  RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
+  cp ${BINARY_NAME}${EXT} ${RELEASE_ASSET_FILE}
 fi
 MD5_SUM=$(md5sum ${RELEASE_ASSET_FILE} | cut -d ' ' -f 1)
 SHA256_SUM=$(sha256sum ${RELEASE_ASSET_FILE} | cut -d ' ' -f 1)
