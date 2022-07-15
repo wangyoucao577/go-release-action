@@ -73,6 +73,7 @@ jobs:
 | asset_name | **Optional** | Customize asset name if do not want to use the default format `${BINARY_NAME}-${RELEASE_TAG}-${GOOS}-${GOARCH}`. <br>Make sure set it correctly, especially for matrix usage that you have to append `-${{ matrix.goos }}-${{ matrix.goarch }}`. A valid example could be  `asset_name: binary-name-${{ matrix.goos }}-${{ matrix.goarch }}`. |
 | retry | **Optional** | How many times retrying if upload fails. `3` by default. |
 | post_command | **Optional** | Extra command that will be executed for teardown work. e.g. you can use it to upload artifacts to AWS s3 or aliyun OSS |
+| compress_assets | **Optional** | Upload execuable binaries rather than `.tar.gz` or `.zip` package. |
 
 ### Advanced Example
 
