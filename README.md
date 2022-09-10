@@ -74,6 +74,7 @@ jobs:
 | retry | **Optional** | How many times retrying if upload fails. `3` by default. |
 | post_command | **Optional** | Extra command that will be executed for teardown work. e.g. you can use it to upload artifacts to AWS s3 or aliyun OSS |
 | compress_assets | **Optional** | Upload execuable binaries rather than `.tar.gz` or `.zip` package. |
+| zip_assets | **Optional** | Upload executable binaries published in a `.zip` package. `FALSE` by default. |
 
 ### Advanced Example
 
