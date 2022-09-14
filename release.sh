@@ -106,16 +106,17 @@ ls -lha
 
 if [ ${INPUT_COMPRESS_ASSETS^^} == 'TRUE' ]; then
   # compress and package binary, then calculate checksum
-  RELEASE_ASSET_EXT='.tar.gz'
-  MEDIA_TYPE='application/gzip'
-  RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-  if [ ${INPUT_GOOS} == 'windows' || ${INPUT_ZIP_ASSETS} == 'TRUE' ]; then
+  if [ ${INPUT_GOOS} != 'windows' || ${INPUT_COMPRESS_ASSETS_FORMAT} == 'gz' ]; then
+    RELEASE_ASSET_EXT='.tar.gz'
+    MEDIA_TYPE='application/gzip'
+    RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
+    ( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_FILE} * )
+  fi
+  if [ ${INPUT_GOOS} == 'windows' || ${INPUT_COMPRESS_ASSETS_FORMAT} == 'zip' ]; then
     RELEASE_ASSET_EXT='.zip'
     MEDIA_TYPE='application/zip'
     RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
     ( shopt -s dotglob; zip -vr ${RELEASE_ASSET_FILE} * )
-  else
-    ( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_FILE} * )
   fi
 else
   RELEASE_ASSET_EXT=${EXT}
