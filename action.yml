@@ -91,10 +91,10 @@ inputs:
     description: 'Compress assets before uploading'
     required: false
     default: 'TRUE'
-  compress_assets_format:
-    description: 'Defines compression method for compressed assets'
+  zip_assets:
+    description: 'Produce zip file assets for all platforms'
     required: false
-    default: ''
+    default: 'FALSE'
 
 runs:
   using: 'docker'
@@ -121,6 +121,7 @@ runs:
     - ${{ inputs.retry }}
     - ${{ inputs.post_command }}
     - ${{ inputs.compress_assets }}
+    - ${{ inputs.zip_assets }}
 
 branding:
   icon: 'package'
