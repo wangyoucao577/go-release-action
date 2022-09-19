@@ -109,7 +109,7 @@ if [ ${INPUT_COMPRESS_ASSETS^^} == 'TRUE' ]; then
   RELEASE_ASSET_EXT='.tar.gz'
   MEDIA_TYPE='application/gzip'
   RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-  if [ ${INPUT_GOOS} == 'windows' || ${INPUT_ZIP_ASSETS} == 'TRUE' ]; then
+  if [ ${INPUT_GOOS} == 'windows' ]; then
     RELEASE_ASSET_EXT='.zip'
     MEDIA_TYPE='application/zip'
     RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
