@@ -104,12 +104,13 @@ fi
 cd ${BUILD_ARTIFACTS_FOLDER}
 ls -lha
 
-if [ ${INPUT_COMPRESS_ASSETS^^} == 'TRUE' ]; then
+# INPUT_COMPRESS_ASSETS=='TRUE' is used for backwards compatability. `AUTO`, `ZIP`, `OFF` are the recommended values
+if [ ${INPUT_COMPRESS_ASSETS^^} == "TRUE" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "AUTO" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "ZIP" ]; then
   # compress and package binary, then calculate checksum
   RELEASE_ASSET_EXT='.tar.gz'
   MEDIA_TYPE='application/gzip'
   RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-  if [ ${INPUT_GOOS} == 'windows' ]; then
+  if [ ${INPUT_GOOS} == 'windows' ] || [ ${INPUT_COMPRESS_ASSETS^^} == "ZIP" ]; then
     RELEASE_ASSET_EXT='.zip'
     MEDIA_TYPE='application/zip'
     RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
@@ -117,11 +118,14 @@ if [ ${INPUT_COMPRESS_ASSETS^^} == 'TRUE' ]; then
   else
     ( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_FILE} * )
   fi
-else
+elif [ ${INPUT_COMPRESS_ASSETS^^} == "OFF" ]; then
   RELEASE_ASSET_EXT=${EXT}
   MEDIA_TYPE="application/octet-stream"
   RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
   cp ${BINARY_NAME}${EXT} ${RELEASE_ASSET_FILE}
+else
+  echo "Invalid value for INPUT_COMPRESS_ASSETS: ${INPUT_COMPRESS_ASSETS} . Acceptable values are AUTO,ZIP, or OFF."
+  exit 1
 fi
 MD5_SUM=$(md5sum ${RELEASE_ASSET_FILE} | cut -d ' ' -f 1)
 SHA256_SUM=$(sha256sum ${RELEASE_ASSET_FILE} | cut -d ' ' -f 1)
