@@ -1,20 +1,21 @@
 #!/bin/bash -eux
 
-GO_LINUX_PACKAGE_URL="https://go.dev/dl/$(curl https://go.dev/VERSION?m=text).linux-amd64.tar.gz"
+ARCH=$(dpkg --print-architecture)
+GO_LINUX_PACKAGE_URL="https://go.dev/dl/$(curl https://go.dev/VERSION?m=text).linux-${ARCH}.tar.gz"
 if [[ ${INPUT_GOVERSION} == "1.19" ]]; then
-    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.19.1.linux-amd64.tar.gz"
+    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.19.1.linux-${ARCH}.tar.gz"
 elif [[ ${INPUT_GOVERSION} == "1.18" ]]; then
-    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.18.6.linux-amd64.tar.gz"
+    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.18.6.linux-${ARCH}.tar.gz"
 elif [[ ${INPUT_GOVERSION} == "1.17" ]]; then
-    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.17.13.linux-amd64.tar.gz"
+    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.17.13.linux-${ARCH}.tar.gz"
 elif [[ ${INPUT_GOVERSION} == "1.16" ]]; then
-    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.16.15.linux-amd64.tar.gz"
+    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.16.15.linux-${ARCH}.tar.gz"
 elif [[ ${INPUT_GOVERSION} == "1.15" ]]; then
-    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.15.15.linux-amd64.tar.gz"
+    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.15.15.linux-${ARCH}.tar.gz"
 elif [[ ${INPUT_GOVERSION} == "1.14" ]]; then
-    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.14.15.linux-amd64.tar.gz"
+    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.14.15.linux-${ARCH}.tar.gz"
 elif [[ ${INPUT_GOVERSION} == "1.13" ]]; then
-    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.13.15.linux-amd64.tar.gz"
+    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.13.15.linux-${ARCH}.tar.gz"
 elif [[ ${INPUT_GOVERSION} == http* ]]; then
     GO_LINUX_PACKAGE_URL=${INPUT_GOVERSION}
 fi
