@@ -16,6 +16,7 @@ RUN arch=$(dpkg --print-architecture);wget --no-check-certificate --progress=dot
   tar -Jxf upx-3.96-${arch}_linux.tar.xz && \
   mv upx-3.96-${arch}_linux /usr/local/ && \
   ln -s /usr/local/upx-3.96-${arch}_linux/upx /usr/local/bin/upx && \
+  rm upx-3.96-${arch}_linux.tar.xz && \
   upx --version
 
 # github-assets-uploader to provide robust github assets upload
