@@ -1,5 +1,5 @@
 # action.yml
-name: 'Go Release Binaries Action'
+name: 'Go Release Binaries'
 author: 'Jay Zhang <wangyoucao577@gmail.com>'
 description: 'Build and Release Go Binaries to GitHub Release Assets'
 inputs:
