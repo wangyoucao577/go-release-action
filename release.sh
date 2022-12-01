@@ -29,6 +29,8 @@ elif [ ${GITHUB_EVENT_NAME} == 'push' ]; then
     echo "Event: ${GITHUB_EVENT_NAME}"
 elif [ ${GITHUB_EVENT_NAME} == 'workflow_dispatch' ]; then
     echo "Event: ${GITHUB_EVENT_NAME}"
+elif [ ${GITHUB_EVENT_NAME} == 'workflow_run' ]; then
+    echo "Event: ${GITHUB_EVENT_NAME}"
 else
     echo "Unsupport event: ${GITHUB_EVENT_NAME}!"
     exit 1
