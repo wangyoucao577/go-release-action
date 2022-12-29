@@ -2,10 +2,9 @@ name: Test
 
 on:
   push:
-    branches:
-      - 'master'
-      - '!release/**'
-      - '!*-prebuilt'
+    branches-ignore:
+      - '*-prebuilt'
+      - 'release/**'
     tags:        
       - 'v**'
     paths-ignore:
