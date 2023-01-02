@@ -199,3 +199,25 @@ jobs:
         overwrite: true
         release_tag: v0.1-test-assets
         compress_assets: ${{ matrix.compress_assets }}
+
+  multi-binaries-test:
+    name: Multi Binaries Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: [amd64]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Run go-release-action on test code
+      uses: ./
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
+        project_path: ./test/mutli-binaries/...
+        extra_files: LICENSE README.md
+        build_flags: -v
+        overwrite: true
+        release_tag: v0.1-test-assets
