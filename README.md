@@ -23,6 +23,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - Support private repositories.
 - Support executable compression by [upx](https://github.com/upx/upx).
 - Support retry if upload phase fails.    
+- Support build multiple binaries and include them in one package(`.zip/.tar.gz`).       
 
 ## Usage
 
@@ -57,7 +58,7 @@ jobs:
 | goarch | **Mandatory** | `GOARCH` is the running program's architecture target: one of `386`, `amd64`, `arm`, `arm64`, `s390x`, `loong64` and so on. |
 | goamd64 | **Optional** | `GOAMD64` is the running programs amd64 microarchitecture level, which is available since `go1.18`. It should only be used when `GOARCH` is `amd64`: one of `v1`, `v2`, `v3`, `v4`. |
 | goversion |  **Optional** | The `Go` compiler version. `latest`([check it here](https://go.dev/VERSION?m=text)) by default, optional `1.13`, `1.14`, `1.15`, `1.16`, `1.17`, `1.18`, `1.19`. <br>It also takes download URL instead of version string if you'd like to use more specified version. But make sure your URL is `linux-amd64` package, better to find the URL from [Go - Downloads](https://go.dev/dl/).<br>E.g., `https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz`. |
-| project_path | **Optional** | Where to run `go build`. <br>Use `.` by default. |
+| project_path | **Optional** | Where to run `go build`. <br>Use `.` by default. <br>It's also permitted to use `project_path: ./cmd1 ./cmd2` to build multiple binaries and include them in one package.  |
 | binary_name | **Optional** | Specify another binary name if do not want to use repository basename. <br>Use your repository's basename if not set. |
 | pre_command | **Optional** | Extra command that will be executed before `go build`. You may want to use it to solve dependency if you're NOT using [Go Modules](https://github.com/golang/go/wiki/Modules). |
 | build_command | **Optional** | The actual command to build binary, typically `go build`. You may want to use other command wrapper, e.g., [packr2](https://github.com/gobuffalo/packr/tree/master/v2), example `build_command: 'packr2 build'`. Remember to use `pre_command` to set up `packr2` command in this scenario.<br>It also supports the `make`(`Makefile`) building system, example `build_command: make`. In this case both `build_flags` and `ldflags` will be ignored since they should be written in your `Makefile` already. Also, please make sure the generated binary placed in the path where `make` runs, i.e., `project_path`. |
