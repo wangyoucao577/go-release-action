@@ -176,7 +176,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
-        project_path: ./test/mutli-binaries/cmd1/ ./test/mutli-binaries/cmd2
+        project_path: (./test/mutli-binaries/cmd1/ ./test/mutli-binaries/cmd2)
         extra_files: LICENSE README.md
         build_flags: -v
         overwrite: true
