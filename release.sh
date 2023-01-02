@@ -81,7 +81,7 @@ if [[ "$( declare -p INPUT_PROJECT_PATH_AS_ARRAY )" =~ "declare -a" ]]; then
     INPUT_PROJECT_PATH_IS_ARRAY=TRUE
 fi
 for CURR_PROJECT_PATH in "${INPUT_PROJECT_PATH_AS_ARRAY[@]}"; do
-    cd ${CURR_PROJECT_PATH}
+    cd {GITHUB_WORKSPACE}/${CURR_PROJECT_PATH}
 
     # for array project paths, use each project path's name as binary name
     if [ ${INPUT_PROJECT_PATH_IS_ARRAY} == "TRUE" ]; then
