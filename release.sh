@@ -69,38 +69,54 @@ else
     fi
 fi
 
-# build
+cd ${GITHUB_WORKSPACE}
+
 BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
-mkdir -p ${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}
-cd ${INPUT_PROJECT_PATH}
-if [[ "${INPUT_BUILD_COMMAND}" =~ ^make.* ]]; then
-    # start with make, assumes using make to build golang binaries, execute it directly
-    GOAMD64=${GOAMD64_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} eval ${INPUT_BUILD_COMMAND}
-    if [ -f "${BINARY_NAME}${EXT}" ]; then
-        # assumes the binary will be generated in current dir, copy it for later processes
-        cp ${BINARY_NAME}${EXT} ${BUILD_ARTIFACTS_FOLDER}/
+mkdir -p ${BUILD_ARTIFACTS_FOLDER}
+
+# build
+INPUT_PROJECT_PATH_IS_ARRAY=FALSE
+if [[ "$( declare -p INPUT_PROJECT_PATH )" =~ "declare -a" ]]; then
+    INPUT_PROJECT_PATH_IS_ARRAY=TRUE
+fi
+for CURR_PROJECT_PATH in "${INPUT_PROJECT_PATH[@]}"; do
+    cd ${CURR_PROJECT_PATH}
+
+    # for array project paths, use each project path's name as binary name
+    if [ ${INPUT_PROJECT_PATH_IS_ARRAY} == "TRUE" ]; then
+        BINARY_NAME=$(basename ${CURR_PROJECT_PATH})
     fi
-else
-    GOAMD64=${GOAMD64_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} -o ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}"
-fi
 
+    # build
+    if [[ "${INPUT_BUILD_COMMAND}" =~ ^make.* ]]; then
+        # start with make, assumes using make to build golang binaries, execute it directly
+        GOAMD64=${GOAMD64_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} eval ${INPUT_BUILD_COMMAND}
+        if [ -f "${BINARY_NAME}${EXT}" ]; then
+            # assumes the binary will be generated in current dir, copy it for later processes
+            cp ${BINARY_NAME}${EXT} ${GITHUB_WORKSPACE}/${BUILD_ARTIFACTS_FOLDER}/
+        fi
+    else
+        GOAMD64=${GOAMD64_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} -o ${GITHUB_WORKSPACE}/${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}"
+    fi
 
-# executable compression
-if [ ! -z "${INPUT_EXECUTABLE_COMPRESSION}" ]; then
-if [[ "${INPUT_EXECUTABLE_COMPRESSION}" =~ ^upx.* ]]; then
-    # start with upx, use upx to compress the executable binary
-    eval ${INPUT_EXECUTABLE_COMPRESSION} ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT}
-else
-    echo "Unsupport executable compression: ${INPUT_EXECUTABLE_COMPRESSION}!"
-    exit 1
-fi
-fi
+    # executable compression
+    if [ ! -z "${INPUT_EXECUTABLE_COMPRESSION}" ]; then
+        if [[ "${INPUT_EXECUTABLE_COMPRESSION}" =~ ^upx.* ]]; then
+            # start with upx, use upx to compress the executable binary
+            eval ${INPUT_EXECUTABLE_COMPRESSION} ${GITHUB_WORKSPACE}/${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT}
+        else
+            echo "Unsupport executable compression: ${INPUT_EXECUTABLE_COMPRESSION}!"
+            exit 1
+        fi
+    fi
+
+done
+
+cd ${GITHUB_WORKSPACE}
 
 # prepare extra files
 if [ ! -z "${INPUT_EXTRA_FILES}" ]; then
-  cd ${GITHUB_WORKSPACE}
-  cp -r ${INPUT_EXTRA_FILES} ${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}/
-  cd ${INPUT_PROJECT_PATH}
+    cp -r ${INPUT_EXTRA_FILES} ${BUILD_ARTIFACTS_FOLDER}/
 fi
 
 cd ${BUILD_ARTIFACTS_FOLDER}
@@ -121,6 +137,12 @@ if [ ${INPUT_COMPRESS_ASSETS^^} == "TRUE" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "
     ( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_FILE} * )
   fi
 elif [ ${INPUT_COMPRESS_ASSETS^^} == "OFF" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "FALSE" ]; then
+
+    if [ ${INPUT_PROJECT_PATH_IS_ARRAY} == "TRUE" ]; then
+        echo "compress_assets doesn't allow to be disabled when multiple binaries!"
+        exit 1
+    fi
+
   RELEASE_ASSET_EXT=${EXT}
   MEDIA_TYPE="application/octet-stream"
   RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
