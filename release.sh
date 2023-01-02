@@ -77,7 +77,7 @@ mkdir -p ${BUILD_ARTIFACTS_FOLDER}
 # build
 INPUT_PROJECT_PATH_IS_ARRAY=FALSE
 INPUT_PROJECT_PATH_AS_ARRAY=(${INPUT_PROJECT_PATH})
-if [[ "$( declare -p INPUT_PROJECT_PATH_AS_ARRAY )" =~ "declare -a" ]]; then
+if [[ "$( declare -p INPUT_PROJECT_PATH_AS_ARRAY )" =~ "declare -a" && ${#INPUT_PROJECT_PATH_AS_ARRAY[@]} -gt 1 ]]; then
     INPUT_PROJECT_PATH_IS_ARRAY=TRUE
 fi
 for CURR_PROJECT_PATH in "${INPUT_PROJECT_PATH_AS_ARRAY[@]}"; do
