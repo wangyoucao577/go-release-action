@@ -18,6 +18,8 @@ elif [[ ${INPUT_GOVERSION} == "1.13" ]]; then
     GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.13.15.linux-${ARCH}.tar.gz"
 elif [[ ${INPUT_GOVERSION} == http* ]]; then
     GO_LINUX_PACKAGE_URL=${INPUT_GOVERSION}
+elif [[ -n ${INPUT_GOVERSION} ]]; then
+    GO_LINUX_PACKAGE_URL="https://go.dev/dl/go${INPUT_GOVERSION}.linux-${ARCH}.tar.gz"
 fi
 
 wget --progress=dot:mega ${GO_LINUX_PACKAGE_URL} -O go-linux.tar.gz 
