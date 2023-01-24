@@ -23,6 +23,10 @@ inputs:
     description: 'The `Go` compiler version.'
     required: false
     default: ''
+  goversion_file:
+    description: 'The path to the go.mod file that contains `Go` compiler version'
+    required: false
+    default: ''
   build_flags:
     description: 'Additional arguments to pass the go build command.'
     required: false
@@ -100,6 +104,7 @@ runs:
     - ${{ inputs.goos }}
     - ${{ inputs.goarch }}
     - ${{ inputs.goversion }}
+    - ${{ inputs.goversion_file }}
     - ${{ inputs.build_flags}}
     - ${{ inputs.ldflags }}
     - ${{ inputs.project_path }}
