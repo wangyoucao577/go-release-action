@@ -2,7 +2,7 @@
 
 ARCH=$(dpkg --print-architecture)
 GO_LINUX_PACKAGE_URL="https://go.dev/dl/$(curl https://go.dev/VERSION?m=text).linux-${ARCH}.tar.gz"
-if [[ "${INPUT_GOVERSION##/}" == "go.mod" ]]; then
+if [[ "${INPUT_GOVERSION##*/}" == "go.mod" ]]; then
     INPUT_GOVERSION=$(grep -e '^go' -m 1 ${INPUT_GOVERSION} | sed -e 's/go //g')
 fi
 if [[ ${INPUT_GOVERSION} == "1.19" ]]; then
