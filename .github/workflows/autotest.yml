@@ -107,6 +107,37 @@ jobs:
         release_tag: v0.1-test-assets
         asset_name: testmain-set-up-go-${{ env.GO_VERSION_TAG }}-${{ matrix.goos }}-${{ matrix.goarch }}
 
+  setup-go-with-gomod-test:
+    name: Set up Go with go.mod Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux]
+        goarch: [amd64]
+        goversion: ["go.mod", "./go.mod", ""]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Set GO_VERSION_TAG env
+      run: echo GO_VERSION_TAG=$(basename ${{ matrix.goversion }}) >> ${GITHUB_ENV}
+    - name: Generate go.mod
+      run: go mod init localtest
+    - name: Run go-release-action on test code
+      uses: ./
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
+        goversion: ${{ matrix.goversion }}
+        project_path: ./test/
+        binary_name: testmain
+        build_flags: -v
+        ldflags: -X "main.buildTime=${{ env.BUILD_TIME }}" -X main.gitCommit=${{ github.sha }} -X main.gitRef=${{ github.ref }}
+        md5sum: false
+        overwrite: true
+        release_tag: v0.1-test-assets
+        asset_name: testmain-set-up-go-${{ env.GO_VERSION_TAG }}-${{ matrix.goos }}-${{ matrix.goarch }}
+
   build-via-makefile-test:
     name: Makefile Build Test
     runs-on: ubuntu-latest
