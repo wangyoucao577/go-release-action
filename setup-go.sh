@@ -16,7 +16,7 @@ elif [[ $INPUT_GOVERSION == 1.14 ]]; then
     GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.14.15.linux-${ARCH}.tar.gz"
 elif [[ $INPUT_GOVERSION == 1.13 ]]; then
     GO_LINUX_PACKAGE_URL="https://go.dev/dl/go1.13.15.linux-${ARCH}.tar.gz"
-elif [[ ${INPUT_GOVERSION^^} == http* ]]; then  # URL scheme isn't case sensitive.
+elif [[ ${INPUT_GOVERSION^^} == HTTP* ]]; then  # URL scheme isn't case sensitive.
     GO_LINUX_PACKAGE_URL=$INPUT_GOVERSION
 elif [[ $INPUT_GOVERSION ]]; then
     GO_LINUX_PACKAGE_URL="https://go.dev/dl/go${INPUT_GOVERSION}.linux-${ARCH}.tar.gz"
