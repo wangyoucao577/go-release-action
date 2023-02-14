@@ -2,7 +2,7 @@ on:
   - push
 
 name: Check shell scripts using shellcheck
-permissions:
+permissions: {}
 
 jobs:
   shellcheck:
