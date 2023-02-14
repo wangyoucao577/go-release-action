@@ -74,6 +74,7 @@ jobs:
 | retry | **Optional** | How many times retrying if upload fails. `3` by default. |
 | post_command | **Optional** | Extra command that will be executed for teardown work. e.g. you can use it to upload artifacts to AWS s3 or aliyun OSS |
 | compress_assets | **Optional** | `auto` default will produce a `zip` file for Windows and `tar.gz` for others. `zip` will force the use of of `zip`. `OFF` will disable packaging of assets. |
+| tarbomb | **Optional* | Should the archive be rootless - i.e. a Tarbomb?  Set to `FALSE` to ensure the release archive has a root directory.  [More information on tarbombs](https://en.wikipedia.org/wiki/Tar_(computing)).  `TRUE` by default. |
 
 ### Advanced Example
 

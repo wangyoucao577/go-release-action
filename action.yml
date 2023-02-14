@@ -91,6 +91,10 @@ inputs:
     description: 'Compress assets before uploading'
     required: false
     default: 'TRUE'
+  tarbomb:
+    description: 'Should the archive be rootless - i.e. a Tarbomb?'
+    required: false
+    default: 'TRUE'
 
 runs:
   using: 'docker'
@@ -117,6 +121,7 @@ runs:
     - ${{ inputs.retry }}
     - ${{ inputs.post_command }}
     - ${{ inputs.compress_assets }}
+    - ${{ inputs.tarbomb }}
 
 branding:
   icon: 'package'
