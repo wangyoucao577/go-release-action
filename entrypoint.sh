@@ -9,4 +9,3 @@ env
 
 # build & release go binaries
 /release.sh
-
