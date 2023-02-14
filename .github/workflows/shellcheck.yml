@@ -1,9 +1,7 @@
 on:
-  push:
-    branches:
-      - master
+  - push
 
-name: "Trigger: Push action"
+name: Check shell scripts using shellcheck
 permissions:
 
 jobs:
