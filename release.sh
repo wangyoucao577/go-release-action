@@ -103,8 +103,14 @@ if [ ! -z "${INPUT_EXTRA_FILES}" ]; then
   cd ${INPUT_PROJECT_PATH}
 fi
 
-cd ${BUILD_ARTIFACTS_FOLDER}
-ls -lha
+if [[ ${INPUT_TARBOMB^^} == TRUE ]]; then
+    cd "$BUILD_ARTIFACTS_FOLDER"
+    SOURCE_DIR="."
+    ls -lha
+else
+    ls -lha "$BUILD_ARTIFACTS_FOLDER"
+    SOURCE_DIR="$BUILD_ARTIFACTS_FOLDER"
+fi
 
 # INPUT_COMPRESS_ASSETS=='TRUE' is used for backwards compatability. `AUTO`, `ZIP`, `OFF` are the recommended values
 if [ ${INPUT_COMPRESS_ASSETS^^} == "TRUE" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "AUTO" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "ZIP" ]; then
@@ -116,9 +122,9 @@ if [ ${INPUT_COMPRESS_ASSETS^^} == "TRUE" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "
     RELEASE_ASSET_EXT='.zip'
     MEDIA_TYPE='application/zip'
     RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-    ( shopt -s dotglob; zip -vr ${RELEASE_ASSET_FILE} * )
+    ( shopt -s dotglob; zip -vr "$RELEASE_ASSET_FILE" "$SOURCE_DIR/"* )
   else
-    ( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_FILE} * )
+    ( shopt -s dotglob; tar -czvf "$RELEASE_ASSET_FILE" "$SOURCE_DIR/"* )
   fi
 elif [ ${INPUT_COMPRESS_ASSETS^^} == "OFF" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "FALSE" ]; then
   RELEASE_ASSET_EXT=${EXT}
