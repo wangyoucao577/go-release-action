@@ -71,6 +71,10 @@ inputs:
     description: 'Upload binaries to specified release page that indicated by release name.'
     required: false
     default: ''
+  release_repo:
+    description: 'Repository to upload the binaries'
+    required: false
+    default: ''
   overwrite:
     description: "Overwrite asset if it's already exist."
     required: false
@@ -112,6 +116,7 @@ runs:
     - ${{ inputs.sha256sum }}
     - ${{ inputs.release_tag }}
     - ${{ inputs.release_name }}
+    - ${{ inputs.release_repo }}
     - ${{ inputs.overwrite }}
     - ${{ inputs.asset_name }}
     - ${{ inputs.retry }}
