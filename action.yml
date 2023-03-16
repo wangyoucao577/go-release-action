@@ -19,6 +19,10 @@ inputs:
     description: 'GOAMD64 is the running programs amd64 microarchitecture level: one of v1, v2, v3, v4.'
     required: false
     default: ''
+  goarm:
+    description: 'GOARM is the running programs arm microarchitecture level: ARMv5,ARMv6,ARMv7'
+    required: false
+    default: ''    
   goversion:
     description: 'The `Go` compiler version.'
     required: false
@@ -103,6 +107,8 @@ runs:
     - ${{ inputs.github_token }}
     - ${{ inputs.goos }}
     - ${{ inputs.goarch }}
+    - ${{ inputs.goamd64 }}
+    - ${{ inputs.goarm }}    
     - ${{ inputs.goversion }}
     - ${{ inputs.build_flags}}
     - ${{ inputs.ldflags }}
