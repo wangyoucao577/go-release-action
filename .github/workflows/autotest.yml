@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         goos: [linux, windows, darwin]
-        goarch: [amd64, arm64]
+        goarch: [amd64, arm64, arm]
         exclude:
           - goarch: arm64
             goos: windows
@@ -26,6 +26,10 @@ jobs:
             goos: linux
           - goarch: amd64
             goos: windows
+          - goarch: arm
+            goos: darwin
+          - goarch: arm
+            goos: windows   
         include:
           - goos: linux
             goarch: amd64
@@ -39,6 +43,11 @@ jobs:
           - goos: windows
             goarch: amd64
             goamd64: v3
+          - goos: darwin
+            goarch: amd64            
+          - goos: linux
+            goarch: arm
+            goarm: "7"            
     steps:
     # - name: Wait release docker build for release branches
     #   if: contains(github.ref, 'release')
@@ -56,7 +65,8 @@ jobs:
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
         goamd64: ${{ matrix.goamd64 }}
-        goversion: https://go.dev/dl/go1.16.2.linux-amd64.tar.gz
+        goarm: ${{ matrix.goarm }}
+        goversion: https://go.dev/dl/go1.19.7.linux-amd64.tar.gz
         project_path: ./test/
         binary_name: testmain
         pre_command: go mod init localtest
@@ -79,7 +89,7 @@ jobs:
         goos: [linux]
         goarch: [amd64]
         # "" means default
-        goversion: ["", "1.19", "1.19.5", "https://golang.org/dl/go1.16.1.linux-amd64.tar.gz"]
+        goversion: ["", "1.19", "1.19.7", "https://go.dev/dl/go1.19.7.linux-amd64.tar.gz"]
     steps:
     # - name: Wait release docker build for release branches
     #  if: contains(github.ref, 'release')
