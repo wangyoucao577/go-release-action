@@ -67,6 +67,9 @@ else
     fi
 fi
 
+# remove .git
+rm -rf .git
+
 # build
 BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
 mkdir -p ${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}
