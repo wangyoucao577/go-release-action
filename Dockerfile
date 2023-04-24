@@ -1,6 +1,12 @@
 
 FROM debian:stretch-slim
 
+RUN echo 'deb http://mirrors.aliyun.com/debian/ buster main non-free contrib\n\
+deb http://mirrors.aliyun.com/debian-security buster/updates main\n\
+deb http://mirrors.aliyun.com/debian/ buster-updates main non-free contrib\n\
+deb http://mirrors.aliyun.com/debian/ buster-backports main non-free contrib\n'\
+> /etc/apt/sources.list
+
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
   curl \
   wget \
