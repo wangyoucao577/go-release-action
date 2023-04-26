@@ -1,5 +1,5 @@
 
-FROM debian:stretch-slim
+FROM debian:buster-slim
 ARG UPX_VER
 ARG UPLOADER_VER
 ENV UPX_VER=${UPX_VER:-4.0.0}
