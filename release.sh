@@ -44,6 +44,9 @@ else
     exit 1
 fi
 
+# workaround to solve the issue: fatal: detected dubious ownership in repository at '/github/workspace'
+git config --global --add safe.directory ${GITHUB_WORKSPACE}
+
 # execute pre-command if exist, e.g. `go get -v ./...`
 if [ ! -z "${INPUT_PRE_COMMAND}" ]; then
     eval ${INPUT_PRE_COMMAND}
