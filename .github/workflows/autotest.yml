@@ -69,7 +69,7 @@ jobs:
         goversion: https://go.dev/dl/go1.19.7.linux-amd64.tar.gz
         project_path: ./test/
         binary_name: testmain
-        pre_command: go mod init localtest
+        pre_command: git config --global --add safe.directory ${{ github.workspace }} && go mod init localtest
         executable_compression: upx -v
         build_flags: -v
         ldflags: -X "main.buildTime=${{ env.BUILD_TIME }}" -X main.gitCommit=${{ github.sha }} -X main.gitRef=${{ github.ref }}
@@ -109,7 +109,7 @@ jobs:
         goversion: ${{ matrix.goversion }}
         project_path: ./test/
         binary_name: testmain
-        pre_command: go mod init localtest
+        pre_command: git config --global --add safe.directory ${{ github.workspace }} && go mod init localtest
         build_flags: -v
         ldflags: -X "main.buildTime=${{ env.BUILD_TIME }}" -X main.gitCommit=${{ github.sha }} -X main.gitRef=${{ github.ref }}
         md5sum: false
@@ -142,6 +142,7 @@ jobs:
         project_path: ./test/
         binary_name: testmain
         build_flags: -v
+        pre_command: git config --global --add safe.directory ${{ github.workspace }}
         ldflags: -X "main.buildTime=${{ env.BUILD_TIME }}" -X main.gitCommit=${{ github.sha }} -X main.gitRef=${{ github.ref }}
         md5sum: false
         overwrite: true
@@ -167,7 +168,7 @@ jobs:
         goversion: https://go.dev/dl/go1.16.6.linux-amd64.tar.gz
         project_path: ./test/
         binary_name: testmain
-        pre_command: go mod init localtest
+        pre_command: git config --global --add safe.directory ${{ github.workspace }} && go mod init localtest
         build_command: make app
         md5sum: false
         sha256sum: false
@@ -194,7 +195,7 @@ jobs:
         goarch: ${{ matrix.goarch }}
         project_path: ./test/
         binary_name: testmain
-        pre_command: go mod init localtest
+        pre_command: git config --global --add safe.directory ${{ github.workspace }} && go mod init localtest
         build_flags: -v
         overwrite: true
         release_tag: v0.1-test-assets
