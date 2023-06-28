@@ -35,6 +35,10 @@ on:
   release:
     types: [created]
 
+permissions:
+    contents: write
+    packages: write
+
 jobs:
   release-linux-amd64:
     name: release linux/amd64
@@ -91,6 +95,10 @@ jobs:
 on:
   release:
     types: [created]
+
+permissions:
+    contents: write
+    packages: write
 
 jobs:
   releases-matrix:
