@@ -27,7 +27,6 @@ elif [[ -n ${INPUT_GOVERSION} ]]; then
     GO_LINUX_PACKAGE_URL="https://go.dev/dl/go${INPUT_GOVERSION}.linux-${ARCH}.tar.gz"
 fi
 
-
 wget --progress=dot:mega ${GO_LINUX_PACKAGE_URL} -O "$TEMP/go-linux.tar.gz"
 (
     cd "$TEMP" || exit 1
@@ -39,5 +38,3 @@ mkdir -p /go/bin /go/src /go/pkg
 export GO_HOME=/usr/local/go
 export GOPATH=/go
 export PATH=${GOPATH}/bin:${GO_HOME}/bin/:$PATH
-
-
