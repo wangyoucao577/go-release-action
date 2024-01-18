@@ -99,7 +99,10 @@ inputs:
     description: 'Compress assets before uploading'
     required: false
     default: 'TRUE'
-
+  allow_schedule:
+    description: 'Allow triggering by shedule.'
+    required: false
+    default: 'FALSE'
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -128,6 +131,7 @@ runs:
     - ${{ inputs.retry }}
     - ${{ inputs.post_command }}
     - ${{ inputs.compress_assets }}
+    - ${{ inputs.allow_schedule }}
 
 branding:
   icon: 'package'
