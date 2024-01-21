@@ -31,17 +31,11 @@ if [ ! -z "${INPUT_RELEASE_REPO}" ]; then
 fi
 
 # prompt error if non-supported event
-if [ ${GITHUB_EVENT_NAME} == 'release' ]; then
-    echo "Event: ${GITHUB_EVENT_NAME}"
-elif [ ${GITHUB_EVENT_NAME} == 'push' ]; then
-    echo "Event: ${GITHUB_EVENT_NAME}"
-elif [ ${GITHUB_EVENT_NAME} == 'workflow_dispatch' ]; then
-    echo "Event: ${GITHUB_EVENT_NAME}"
-elif [ ${GITHUB_EVENT_NAME} == 'workflow_run' ]; then
-    echo "Event: ${GITHUB_EVENT_NAME}"
+if egrep -q 'release|push|workflow_dispatch|workflow_run|schedule' <<< "${GITHUB_EVENT_NAME}"; then
+  echo "Event: ${GITHUB_EVENT_NAME}"
 else
-    echo "Unsupport event: ${GITHUB_EVENT_NAME}!"
-    exit 1
+  echo -e "Unsupport event: ${GITHUB_EVENT_NAME}! \nSupport: release | push | workflow_dispatch | workflow_run | schedule"
+  exit 1
 fi
 
 # workaround to solve the issue: fatal: detected dubious ownership in repository at '/github/workspace'
