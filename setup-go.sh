@@ -7,7 +7,7 @@ GO_LINUX_PACKAGE_URL="https://go.dev/dl/$(curl https://go.dev/VERSION?m=text | h
 if [[ "${INPUT_GOVERSION##*/}" == "go.mod" ]]; then
     INPUT_GOVERSION=$(grep -e '^go' -m 1 ${INPUT_GOVERSION} | sed -e 's/go //g')
 fi
-if [[ ${INPUT_GOVERSION} =~ ^1\.[0-9]+ ]]; then
+if [[ ${INPUT_GOVERSION} =~ ^1\.[0-9]+$ ]]; then
     LATEST_MINOR_GOVERSION=$(curl -s https://go.dev/dl/ | grep -oP "go${INPUT_GOVERSION}\.\d+" | head -n 1 | cut -c 3-)
     GO_LINUX_PACKAGE_URL="https://go.dev/dl/go${LATEST_MINOR_GOVERSION}.linux-${ARCH}.tar.gz"
 elif [[ ${INPUT_GOVERSION} == http* ]]; then
