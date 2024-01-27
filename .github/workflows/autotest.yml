@@ -89,7 +89,7 @@ jobs:
         goos: [linux]
         goarch: [amd64]
         # "" means default
-        goversion: ["", "1.19", "1.19.7", "https://go.dev/dl/go1.19.7.linux-amd64.tar.gz"]
+        goversion: ["", "1.21", "1.21.1", "https://go.dev/dl/go1.21.6.linux-amd64.tar.gz"]
     steps:
     # - name: Wait release docker build for release branches
     #  if: contains(github.ref, 'release')
