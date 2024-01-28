@@ -97,7 +97,9 @@ fi
 
 # build
 BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
+BUILD_ARTIFACTS_ARCHIVE_FOLDER="archive_${BUILD_ARTIFACTS_FOLDER}"
 mkdir -p ${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}
+mkdir -p ${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_ARCHIVE_FOLDER}
 cd ${INPUT_PROJECT_PATH}
 if [[ "${INPUT_BUILD_COMMAND}" =~ ^make.* ]]; then
     # start with make, assumes using make to build golang binaries, execute it directly
@@ -142,9 +144,9 @@ if [ ${INPUT_COMPRESS_ASSETS^^} == "TRUE" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "
     RELEASE_ASSET_EXT='.zip'
     MEDIA_TYPE='application/zip'
     RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-    ( shopt -s dotglob; zip -vr ${RELEASE_ASSET_FILE} * )
+    ( shopt -s dotglob; zip -vr "../${BUILD_ARTIFACTS_ARCHIVE_FOLDER}/${RELEASE_ASSET_FILE}" * )
   else
-    ( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_FILE} * )
+    ( shopt -s dotglob; tar cvfz "../${BUILD_ARTIFACTS_ARCHIVE_FOLDER}/${RELEASE_ASSET_FILE}" * )
   fi
 elif [ ${INPUT_COMPRESS_ASSETS^^} == "OFF" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "FALSE" ]; then
   RELEASE_ASSET_EXT=${EXT}
@@ -164,23 +166,32 @@ if [ ${INPUT_OVERWRITE^^} == 'TRUE' ]; then
     GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS="-overwrite"
 fi
 
-# update binary and checksum
-github-assets-uploader -logtostderr -f ${RELEASE_ASSET_FILE} -mediatype ${MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
-if [ ${INPUT_MD5SUM^^} == 'TRUE' ]; then
-MD5_EXT='.md5'
-MD5_MEDIA_TYPE='text/plain'
-echo ${MD5_SUM} >${RELEASE_ASSET_FILE}${MD5_EXT}
-github-assets-uploader -logtostderr -f ${RELEASE_ASSET_FILE}${MD5_EXT} -mediatype ${MD5_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
-fi
+if [ ${GITHUB_EVENT_NAME} != 'workflow_dispatch' ]; then
+    # update binary and checksum
+    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_FILE} -mediatype ${MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
+    if [ ${INPUT_MD5SUM^^} == 'TRUE' ]; then
+    MD5_EXT='.md5'
+    MD5_MEDIA_TYPE='text/plain'
+    echo ${MD5_SUM} >${RELEASE_ASSET_FILE}${MD5_EXT}
+    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_FILE}${MD5_EXT} -mediatype ${MD5_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
+    fi
 
-if [ ${INPUT_SHA256SUM^^} == 'TRUE' ]; then
-SHA256_EXT='.sha256'
-SHA256_MEDIA_TYPE='text/plain'
-echo ${SHA256_SUM} >${RELEASE_ASSET_FILE}${SHA256_EXT}
-github-assets-uploader -logtostderr -f ${RELEASE_ASSET_FILE}${SHA256_EXT} -mediatype ${SHA256_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
+    if [ ${INPUT_SHA256SUM^^} == 'TRUE' ]; then
+    SHA256_EXT='.sha256'
+    SHA256_MEDIA_TYPE='text/plain'
+    echo ${SHA256_SUM} >${RELEASE_ASSET_FILE}${SHA256_EXT}
+    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_FILE}${SHA256_EXT} -mediatype ${SHA256_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
+    fi
 fi
 
 # execute post-command if exist, e.g. upload to AWS s3 or aliyun OSS
 if [ ! -z "${INPUT_POST_COMMAND}" ]; then
     eval ${INPUT_POST_COMMAND}
 fi
+
+# output path for use by other workflows (e.g.: actions/upload-artifact)
+echo "release_asset_dir=${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}" >> "${GITHUB_OUTPUT}"
+echo "release_asset_archive_dir=${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_ARCHIVE_FOLDER}" >> "${GITHUB_OUTPUT}"
+echo "release_asset_name=${RELEASE_ASSET_NAME}" >> "${GITHUB_OUTPUT}"
+echo "release_asset_file=${RELEASE_ASSET_FILE}" >> "${GITHUB_OUTPUT}"
+echo "release_asset_path=${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}/${RELEASE_ASSET_FILE}" >> "${GITHUB_OUTPUT}"

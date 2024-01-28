@@ -100,6 +100,18 @@ inputs:
     required: false
     default: 'TRUE'
 
+outputs:
+  release_asset_dir:
+    description: 'Release file directory provided for use by other workflows'
+  release_asset_archive_dir:
+    description: 'Release file archive directory provided for use by other workflows'
+  release_asset_name:
+    description: 'Release file name without extension provided for use by other workflows'
+  release_asset_file:
+    description: 'Release file name with extension provided for use by other workflows'
+  release_asset_path:
+    description: 'Release file path provided for use by other workflows'
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
