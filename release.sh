@@ -5,7 +5,7 @@ BINARY_NAME=$(basename ${GITHUB_REPOSITORY})
 if [ x${INPUT_BINARY_NAME} != x ]; then
   BINARY_NAME=${INPUT_BINARY_NAME}
 fi
-if [ ! -z "${GITHUB_REF}" ]; then
+if [ -z "${GITHUB_REF}" ]; then
   RELEASE_TAG=$(basename ${GITHUB_REF})
 else
   # workaround if `GITHUB_REF` is empty, see more in https://github.com/wangyoucao577/go-release-action/issues/108
