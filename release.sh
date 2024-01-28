@@ -17,7 +17,11 @@ elif [ ! -z "${INPUT_RELEASE_NAME}" ]; then # prevent upload-asset by tag due to
   RELEASE_TAG=""
 fi
 
-RELEASE_NAME=${INPUT_RELEASE_NAME}
+if [ ! -z "${INPUT_RELEASE_NAME}" ]; then
+  RELEASE_NAME=${INPUT_RELEASE_NAME}
+else
+  RELEASE_NAME=$(jq -r '.release.name' ${GITHUB_EVENT_PATH})
+fi
 
 RELEASE_ASSET_NAME=${BINARY_NAME}-${RELEASE_TAG}-${INPUT_GOOS}-${INPUT_GOARCH}
 if [ ! -z "${INPUT_GOAMD64}" ]; then
