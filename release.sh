@@ -101,9 +101,8 @@ fi
 
 # build
 BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
-BUILD_ARTIFACTS_ARCHIVE_FOLDER="archive_${BUILD_ARTIFACTS_FOLDER}"
-mkdir -p ${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}
-mkdir -p ${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_ARCHIVE_FOLDER}
+RELEASE_ASSET_DIR=${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}
+mkdir -p ${RELEASE_ASSET_DIR}
 cd ${INPUT_PROJECT_PATH}
 if [[ "${INPUT_BUILD_COMMAND}" =~ ^make.* ]]; then
     # start with make, assumes using make to build golang binaries, execute it directly
@@ -131,38 +130,40 @@ fi
 # prepare extra files
 if [ ! -z "${INPUT_EXTRA_FILES}" ]; then
   cd ${GITHUB_WORKSPACE}
-  cp -r ${INPUT_EXTRA_FILES} ${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}/
+  cp -r ${INPUT_EXTRA_FILES} ${RELEASE_ASSET_DIR}/
   cd ${INPUT_PROJECT_PATH}
 fi
 
-cd ${BUILD_ARTIFACTS_FOLDER}
-ls -lha
+ls -lha ${BUILD_ARTIFACTS_FOLDER}
 
 # INPUT_COMPRESS_ASSETS=='TRUE' is used for backwards compatability. `AUTO`, `ZIP`, `OFF` are the recommended values
 if [ ${INPUT_COMPRESS_ASSETS^^} == "TRUE" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "AUTO" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "ZIP" ]; then
   # compress and package binary, then calculate checksum
-  RELEASE_ASSET_EXT='.tar.gz'
-  MEDIA_TYPE='application/gzip'
-  RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
   if [ ${INPUT_GOOS} == 'windows' ] || [ ${INPUT_COMPRESS_ASSETS^^} == "ZIP" ]; then
     RELEASE_ASSET_EXT='.zip'
     MEDIA_TYPE='application/zip'
     RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-    ( shopt -s dotglob; zip -vr "../${BUILD_ARTIFACTS_ARCHIVE_FOLDER}/${RELEASE_ASSET_FILE}" * )
+    RELEASE_ASSET_PATH=${RELEASE_ASSET_FILE}
+    ( shopt -s dotglob; zip -vr ${RELEASE_ASSET_PATH} ${BUILD_ARTIFACTS_FOLDER} )
   else
-    ( shopt -s dotglob; tar cvfz "../${BUILD_ARTIFACTS_ARCHIVE_FOLDER}/${RELEASE_ASSET_FILE}" * )
+    RELEASE_ASSET_EXT='.tar.gz'
+    MEDIA_TYPE='application/gzip'
+    RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
+    RELEASE_ASSET_PATH=${RELEASE_ASSET_FILE}
+    ( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_PATH} ${BUILD_ARTIFACTS_FOLDER} )
   fi
 elif [ ${INPUT_COMPRESS_ASSETS^^} == "OFF" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "FALSE" ]; then
   RELEASE_ASSET_EXT=${EXT}
   MEDIA_TYPE="application/octet-stream"
   RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-  cp ${BINARY_NAME}${EXT} ${RELEASE_ASSET_FILE}
+  RELEASE_ASSET_PATH="${BUILD_ARTIFACTS_FOLDER}/${RELEASE_ASSET_FILE}"
+  cp ${BINARY_NAME}${EXT} ${RELEASE_ASSET_PATH}
 else
   echo "Invalid value for INPUT_COMPRESS_ASSETS: ${INPUT_COMPRESS_ASSETS} . Acceptable values are AUTO,ZIP, or OFF."
   exit 1
 fi
-MD5_SUM=$(md5sum ${RELEASE_ASSET_FILE} | cut -d ' ' -f 1)
-SHA256_SUM=$(sha256sum ${RELEASE_ASSET_FILE} | cut -d ' ' -f 1)
+MD5_SUM=$(md5sum ${RELEASE_ASSET_PATH} | cut -d ' ' -f 1)
+SHA256_SUM=$(sha256sum ${RELEASE_ASSET_PATH} | cut -d ' ' -f 1)
 
 # prefix upload extra params
 GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS=''
@@ -172,30 +173,35 @@ fi
 
 if [ ${GITHUB_EVENT_NAME} != 'workflow_dispatch' ]; then
     # update binary and checksum
-    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_FILE} -mediatype ${MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
+    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_PATH} -mediatype ${MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
     if [ ${INPUT_MD5SUM^^} == 'TRUE' ]; then
     MD5_EXT='.md5'
     MD5_MEDIA_TYPE='text/plain'
-    echo ${MD5_SUM} >${RELEASE_ASSET_FILE}${MD5_EXT}
-    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_FILE}${MD5_EXT} -mediatype ${MD5_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
+    echo ${MD5_SUM} >${RELEASE_ASSET_PATH}${MD5_EXT}
+    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_PATH}${MD5_EXT} -mediatype ${MD5_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
     fi
 
     if [ ${INPUT_SHA256SUM^^} == 'TRUE' ]; then
     SHA256_EXT='.sha256'
     SHA256_MEDIA_TYPE='text/plain'
-    echo ${SHA256_SUM} >${RELEASE_ASSET_FILE}${SHA256_EXT}
-    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_FILE}${SHA256_EXT} -mediatype ${SHA256_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
+    echo ${SHA256_SUM} >${RELEASE_ASSET_PATH}${SHA256_EXT}
+    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_PATH}${SHA256_EXT} -mediatype ${SHA256_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
     fi
 fi
 
-# execute post-command if exist, e.g. upload to AWS s3 or aliyun OSS
-if [ ! -z "${INPUT_POST_COMMAND}" ]; then
-    eval ${INPUT_POST_COMMAND}
-fi
+ls -lha ${INPUT_PROJECT_PATH}
 
 # output path for use by other workflows (e.g.: actions/upload-artifact)
-echo "release_asset_dir=${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}" >> "${GITHUB_OUTPUT}"
-echo "release_asset_archive_dir=${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_ARCHIVE_FOLDER}" >> "${GITHUB_OUTPUT}"
+echo "release_asset_dir=${RELEASE_ASSET_DIR}" >> "${GITHUB_OUTPUT}"
 echo "release_asset_name=${RELEASE_ASSET_NAME}" >> "${GITHUB_OUTPUT}"
 echo "release_asset_file=${RELEASE_ASSET_FILE}" >> "${GITHUB_OUTPUT}"
-echo "release_asset_path=${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}/${RELEASE_ASSET_FILE}" >> "${GITHUB_OUTPUT}"
+echo "release_asset_path=${RELEASE_ASSET_PATH}" >> "${GITHUB_OUTPUT}"
+
+# execute post-command if exist, e.g. upload to AWS s3 or aliyun OSS
+if [ ! -z "${INPUT_POST_COMMAND}" ]; then
+    INPUT_POST_COMMAND=${INPUT_POST_COMMAND/"{RELEASE_ASSET_DIR}"/${RELEASE_ASSET_DIR}}
+    INPUT_POST_COMMAND=${INPUT_POST_COMMAND/"{RELEASE_ASSET_NAME}"/${RELEASE_ASSET_NAME}}
+    INPUT_POST_COMMAND=${INPUT_POST_COMMAND/"{RELEASE_ASSET_FILE}"/${RELEASE_ASSET_FILE}}
+    INPUT_POST_COMMAND=${INPUT_POST_COMMAND/"{RELEASE_ASSET_PATH}"/${RELEASE_ASSET_PATH}}
+    eval ${INPUT_POST_COMMAND}
+fi
