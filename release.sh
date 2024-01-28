@@ -5,7 +5,12 @@ BINARY_NAME=$(basename ${GITHUB_REPOSITORY})
 if [ x${INPUT_BINARY_NAME} != x ]; then
   BINARY_NAME=${INPUT_BINARY_NAME}
 fi
-RELEASE_TAG=$(basename ${GITHUB_REF})
+if [ ! -z "${GITHUB_REF}" ]; then
+  RELEASE_TAG=$(basename ${GITHUB_REF})
+else
+  # workaround if `GITHUB_REF` is empty, see more in https://github.com/wangyoucao577/go-release-action/issues/108
+  RELEASE_TAG=$(jq -r .release.tag_name ${GITHUB_EVENT_PATH})
+fi
 if [ ! -z "${INPUT_RELEASE_TAG}" ]; then
   RELEASE_TAG=${INPUT_RELEASE_TAG}
 elif [ ! -z "${INPUT_RELEASE_NAME}" ]; then # prevent upload-asset by tag due to github-ref default if a name is given
