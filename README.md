@@ -87,8 +87,6 @@ jobs:
 | Parameter | Description |
 | --------- | -------- |
 | release_asset_dir | Release file directory provided for use by other workflows. |
-| release_asset_name | Release file name without extension provided for use by other workflows. |
-| release_asset_file | Release file name with/without extension provided for use by other workflow. |
 
 
 ### Advanced Example
