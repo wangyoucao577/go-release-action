@@ -99,6 +99,10 @@ inputs:
     description: 'Compress assets before uploading'
     required: false
     default: 'TRUE'
+  upload:
+    description: 'Upload release or not upload'
+    required: false
+    default: 'TRUE'
 
 outputs:
   release_asset_dir:
@@ -106,7 +110,7 @@ outputs:
   release_asset_name:
     description: 'Release file name without extension provided for use by other workflows'
   release_asset_file:
-    description: 'Release file name with extension provided for use by other workflows'
+    description: 'Release file name with/without extension provided for use by other workflows'
   release_asset_path:
     description: 'Release file path provided for use by other workflows'
 

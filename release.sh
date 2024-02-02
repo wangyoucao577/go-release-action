@@ -171,7 +171,7 @@ if [ ${INPUT_OVERWRITE^^} == 'TRUE' ]; then
     GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS="-overwrite"
 fi
 
-if [ ${GITHUB_EVENT_NAME} != 'workflow_dispatch' ]; then
+if [ ${INPUT_UPLOAD^^} == 'TRUE' ]; then
     # update binary and checksum
     github-assets-uploader -logtostderr -f ${RELEASE_ASSET_PATH} -mediatype ${MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
     if [ ${INPUT_MD5SUM^^} == 'TRUE' ]; then
