@@ -143,21 +143,18 @@ if [ ${INPUT_COMPRESS_ASSETS^^} == "TRUE" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "
     RELEASE_ASSET_EXT='.zip'
     MEDIA_TYPE='application/zip'
     RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-    RELEASE_ASSET_PATH=${RELEASE_ASSET_FILE}
-    ( shopt -s dotglob; zip -vr ${RELEASE_ASSET_PATH} ${BUILD_ARTIFACTS_FOLDER} )
+    ( shopt -s dotglob; zip -vr ${RELEASE_ASSET_FILE} ${BUILD_ARTIFACTS_FOLDER} )
   else
     RELEASE_ASSET_EXT='.tar.gz'
     MEDIA_TYPE='application/gzip'
     RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-    RELEASE_ASSET_PATH=${RELEASE_ASSET_FILE}
-    ( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_PATH} ${BUILD_ARTIFACTS_FOLDER} )
+    ( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_FILE} ${BUILD_ARTIFACTS_FOLDER} )
   fi
 elif [ ${INPUT_COMPRESS_ASSETS^^} == "OFF" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "FALSE" ]; then
   RELEASE_ASSET_EXT=${EXT}
   MEDIA_TYPE="application/octet-stream"
   RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-  RELEASE_ASSET_PATH="${BUILD_ARTIFACTS_FOLDER}/${RELEASE_ASSET_FILE}"
-  cp ${BINARY_NAME}${EXT} ${RELEASE_ASSET_PATH}
+  cp ${BINARY_NAME}${EXT} "${BUILD_ARTIFACTS_FOLDER}/${RELEASE_ASSET_FILE}"
 else
   echo "Invalid value for INPUT_COMPRESS_ASSETS: ${INPUT_COMPRESS_ASSETS} . Acceptable values are AUTO,ZIP, or OFF."
   exit 1
@@ -193,15 +190,9 @@ ls -lha ${INPUT_PROJECT_PATH}
 
 # output path for use by other workflows (e.g.: actions/upload-artifact)
 echo "release_asset_dir=${RELEASE_ASSET_DIR}" >> "${GITHUB_OUTPUT}"
-echo "release_asset_name=${RELEASE_ASSET_NAME}" >> "${GITHUB_OUTPUT}"
-echo "release_asset_file=${RELEASE_ASSET_FILE}" >> "${GITHUB_OUTPUT}"
-echo "release_asset_path=${RELEASE_ASSET_PATH}" >> "${GITHUB_OUTPUT}"
 
 # execute post-command if exist, e.g. upload to AWS s3 or aliyun OSS
 if [ ! -z "${INPUT_POST_COMMAND}" ]; then
     INPUT_POST_COMMAND=${INPUT_POST_COMMAND/"{RELEASE_ASSET_DIR}"/${RELEASE_ASSET_DIR}}
-    INPUT_POST_COMMAND=${INPUT_POST_COMMAND/"{RELEASE_ASSET_NAME}"/${RELEASE_ASSET_NAME}}
-    INPUT_POST_COMMAND=${INPUT_POST_COMMAND/"{RELEASE_ASSET_FILE}"/${RELEASE_ASSET_FILE}}
-    INPUT_POST_COMMAND=${INPUT_POST_COMMAND/"{RELEASE_ASSET_PATH}"/${RELEASE_ASSET_PATH}}
     eval ${INPUT_POST_COMMAND}
 fi

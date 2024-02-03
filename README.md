@@ -52,7 +52,7 @@ jobs:
         goarch: amd64
 ```
 
-### Parameters
+### Input Parameters
 
 | Parameter | **Mandatory**/**Optional** | Description |
 | --------- | -------- | ----------- |
@@ -80,6 +80,16 @@ jobs:
 | retry | **Optional** | How many times retrying if upload fails. `3` by default. |
 | post_command | **Optional** | Extra command that will be executed for teardown work. e.g. you can use it to upload artifacts to AWS s3 or aliyun OSS |
 | compress_assets | **Optional** | `auto` default will produce a `zip` file for Windows and `tar.gz` for others. `zip` will force the use of `zip`. `OFF` will disable packaging of assets. |
+| upload | **Optional** | Upload release or not upload. If you need to use subsequent workflow to process the file, you can choose not to upload the release. |
+
+### Output Parameters
+
+| Parameter | Description |
+| --------- | -------- |
+| release_asset_dir | Release file directory provided for use by other workflows. |
+| release_asset_name | Release file name without extension provided for use by other workflows. |
+| release_asset_file | Release file name with/without extension provided for use by other workflow. |
+
 
 ### Advanced Example
 
