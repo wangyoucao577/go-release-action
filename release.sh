@@ -134,7 +134,8 @@ if [ ! -z "${INPUT_EXTRA_FILES}" ]; then
   cd ${INPUT_PROJECT_PATH}
 fi
 
-ls -lha ${BUILD_ARTIFACTS_FOLDER}
+cd ${BUILD_ARTIFACTS_FOLDER}
+ls -lha
 
 # INPUT_COMPRESS_ASSETS=='TRUE' is used for backwards compatability. `AUTO`, `ZIP`, `OFF` are the recommended values
 if [ ${INPUT_COMPRESS_ASSETS^^} == "TRUE" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "AUTO" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "ZIP" ]; then
@@ -143,18 +144,21 @@ if [ ${INPUT_COMPRESS_ASSETS^^} == "TRUE" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "
     RELEASE_ASSET_EXT='.zip'
     MEDIA_TYPE='application/zip'
     RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-    ( shopt -s dotglob; zip -vr ${RELEASE_ASSET_FILE} ${BUILD_ARTIFACTS_FOLDER} )
+    RELEASE_ASSET_PATH="../${RELEASE_ASSET_FILE}"
+    ( shopt -s dotglob; zip -vr ${RELEASE_ASSET_PATH} * )
   else
     RELEASE_ASSET_EXT='.tar.gz'
     MEDIA_TYPE='application/gzip'
     RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-    ( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_FILE} ${BUILD_ARTIFACTS_FOLDER} )
+    RELEASE_ASSET_PATH="../${RELEASE_ASSET_FILE}"
+    ( shopt -s dotglob; tar cvfz ${RELEASE_ASSET_PATH} * )
   fi
 elif [ ${INPUT_COMPRESS_ASSETS^^} == "OFF" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "FALSE" ]; then
   RELEASE_ASSET_EXT=${EXT}
   MEDIA_TYPE="application/octet-stream"
   RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
-  cp ${BINARY_NAME}${EXT} "${BUILD_ARTIFACTS_FOLDER}/${RELEASE_ASSET_FILE}"
+  RELEASE_ASSET_PATH=${RELEASE_ASSET_FILE}
+  cp ${BINARY_NAME}${EXT} ${RELEASE_ASSET_PATH}
 else
   echo "Invalid value for INPUT_COMPRESS_ASSETS: ${INPUT_COMPRESS_ASSETS} . Acceptable values are AUTO,ZIP, or OFF."
   exit 1
@@ -186,7 +190,7 @@ if [ ${INPUT_UPLOAD^^} == 'TRUE' ]; then
     fi
 fi
 
-ls -lha ${INPUT_PROJECT_PATH}
+ls -lha ../
 
 # output path for use by other workflows (e.g.: actions/upload-artifact)
 echo "release_asset_dir=${RELEASE_ASSET_DIR}" >> "${GITHUB_OUTPUT}"
