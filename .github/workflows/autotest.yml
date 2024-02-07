@@ -208,6 +208,8 @@ jobs:
         goos: [linux, windows, darwin]
         goarch: [amd64]
     steps:
+    - name: Set BUILD_TIME env
+      run: echo BUILD_TIME=$(date) >> ${GITHUB_ENV}
     - name: Checkout
       uses: actions/checkout@v4
     - name: Run go-release-action on test code
@@ -218,6 +220,6 @@ jobs:
         goarch: ${{ matrix.goarch }}
         project_path: ./test/mutli-binaries/...
         extra_files: LICENSE README.md
-        build_flags: -v
+        build_flags: -v -tags v0.1-test-assets-${{ env.BUILD_TIME }}
         overwrite: true
         release_tag: v0.1-test-assets
