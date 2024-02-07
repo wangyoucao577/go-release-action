@@ -99,6 +99,14 @@ inputs:
     description: 'Compress assets before uploading'
     required: false
     default: 'TRUE'
+  upload:
+    description: 'Upload release or not upload'
+    required: false
+    default: 'TRUE'
+
+outputs:
+  release_asset_dir:
+    description: 'Release file directory provided for use by other workflows'
 
 runs:
   using: 'docker'
