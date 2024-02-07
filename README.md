@@ -23,6 +23,7 @@ Automatically publish `Go` binaries to Github Release Assets through Github Acti
 - Support private repositories.
 - Support executable compression by [upx](https://github.com/upx/upx).
 - Support retry if upload phase fails.    
+- Support build multiple binaries and include them in one package(`.zip/.tar.gz`).       
 
 ## Usage
 
@@ -62,7 +63,7 @@ jobs:
 | goamd64 | **Optional** | `GOAMD64` is the running programs amd64 microarchitecture level, which is available since `go1.18`. It should only be used when `GOARCH` is `amd64`: one of `v1`, `v2`, `v3`, `v4`. |
 | goarm | **Optional** | `GOARM` is the running programs arm microarchitecture level, which is available since `go1.1`. It should only be used when `GOARCH` is `arm`: one of `5`, `6`, `7`, |
 | goversion |  **Optional** | The `Go` compiler version. `latest`([check it here](https://go.dev/VERSION?m=text)) by default, optional `1.13`, `1.14`, `1.15`, `1.16`, `1.17`, `1.18`, `1.19`. You can also define a specific minor release, such as `1.19.5`. <br>Alternatively takes a download URL or a path to go.mod instead of version string. Make sure your URL references the `linux-amd64` package. You can find the URL on [Go - Downloads](https://go.dev/dl/).<br>e.g., `https://dl.google.com/go/go1.13.1.linux-amd64.tar.gz`. |
-| project_path | **Optional** | Where to run `go build`. <br>Use `.` by default. |
+| project_path | **Optional** | Where to run `go build`. <br>Use `.` by default. <br>Assume you have multiple binaries in your `repo/cmd`, you can use `project_path: ./cmd/...` to build multiple binaries and include them in one package.  |
 | binary_name | **Optional** | Specify another binary name if do not want to use repository basename. <br>Use your repository's basename if not set. |
 | pre_command | **Optional** | Extra command that will be executed before `go build`. You may want to use it to solve dependency if you're NOT using [Go Modules](https://github.com/golang/go/wiki/Modules). |
 | build_command | **Optional** | The actual command to build binary, typically `go build`. You may want to use other command wrapper, e.g., [packr2](https://github.com/gobuffalo/packr/tree/master/v2), example `build_command: 'packr2 build'`. Remember to use `pre_command` to set up `packr2` command in this scenario.<br>It also supports the `make`(`Makefile`) building system, example `build_command: make`. In this case both `build_flags` and `ldflags` will be ignored since they should be written in your `Makefile` already. Also, please make sure the generated binary placed in the path where `make` runs, i.e., `project_path`. |
