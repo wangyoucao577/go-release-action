@@ -218,7 +218,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
-        project_path: ./mutli-binaries/...
+        project_path: ./test/multi-binaries/...
         pre_command: go mod init localtest
         extra_files: LICENSE README.md
         build_flags: -v -tags v0.1-test-assets-${{ env.BUILD_TIME }}
