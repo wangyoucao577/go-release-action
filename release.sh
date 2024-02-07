@@ -95,20 +95,34 @@ else
   fi
 fi
 
+# leverage golang feature to support multiple binaries 
+# for example, 'go build -o xxx ./cmd/...' to generate multiple binaries'
+if [[ "${INPUT_PROJECT_PATH}" =~ ^\./.*/\.\.\. ]]; then
+  MULTIPLE_BINARIES=TRUE
+else
+  MULTIPLE_BINARIES=
+fi
+
 # build
 BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
-RELEASE_ASSET_DIR=${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}
-mkdir -p ${RELEASE_ASSET_DIR}
-cd ${INPUT_PROJECT_PATH}
-if [[ "${INPUT_BUILD_COMMAND}" =~ ^make.* ]]; then
-  # start with make, assumes using make to build golang binaries, execute it directly
-  GOAMD64=${GOAMD64_FLAG} GOARM=${GOARM_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} eval ${INPUT_BUILD_COMMAND}
-  if [ -f "${BINARY_NAME}${EXT}" ]; then
-    # assumes the binary will be generated in current dir, copy it for later processes
-    cp ${BINARY_NAME}${EXT} ${BUILD_ARTIFACTS_FOLDER}/
-  fi
+if [ ! -z ${MULTIPLE_BINARIES} ]; then
+  RELEASE_ASSET_DIR=${BUILD_ARTIFACTS_FOLDER}
+  mkdir -p ${RELEASE_ASSET_DIR}
+  GOAMD64=${GOAMD64_FLAG} GOARM=${GOARM_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} -o ${BUILD_ARTIFACTS_FOLDER} ${INPUT_PROJECT_PATH} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}"
 else
-  GOAMD64=${GOAMD64_FLAG} GOARM=${GOARM_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} -o ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}"
+  RELEASE_ASSET_DIR=${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}
+  mkdir -p ${RELEASE_ASSET_DIR}
+  cd ${INPUT_PROJECT_PATH}
+  if [[ "${INPUT_BUILD_COMMAND}" =~ ^make.* ]]; then
+    # start with make, assumes using make to build golang binaries, execute it directly
+    GOAMD64=${GOAMD64_FLAG} GOARM=${GOARM_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} eval ${INPUT_BUILD_COMMAND}
+    if [ -f "${BINARY_NAME}${EXT}" ]; then
+      # assumes the binary will be generated in current dir, copy it for later processes
+      cp ${BINARY_NAME}${EXT} ${BUILD_ARTIFACTS_FOLDER}/
+    fi
+  else
+    GOAMD64=${GOAMD64_FLAG} GOARM=${GOARM_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} -o ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}"
+  fi
 fi
 
 # executable compression
@@ -126,7 +140,9 @@ fi
 if [ ! -z "${INPUT_EXTRA_FILES}" ]; then
   cd ${GITHUB_WORKSPACE}
   cp -r ${INPUT_EXTRA_FILES} ${RELEASE_ASSET_DIR}/
-  cd ${INPUT_PROJECT_PATH}
+  if [ -z ${MULTIPLE_BINARIES} ]; then
+    cd ${INPUT_PROJECT_PATH}
+  fi
 fi
 
 cd ${BUILD_ARTIFACTS_FOLDER}
