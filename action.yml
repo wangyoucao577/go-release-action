@@ -100,7 +100,7 @@ inputs:
     required: false
     default: 'TRUE'
   upload:
-    description: 'Upload release or not upload'
+    description: 'Upload release assets or not'
     required: false
     default: 'TRUE'
 

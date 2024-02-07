@@ -80,7 +80,7 @@ jobs:
 | retry | **Optional** | How many times retrying if upload fails. `3` by default. |
 | post_command | **Optional** | Extra command that will be executed for teardown work. e.g. you can use it to upload artifacts to AWS s3 or aliyun OSS |
 | compress_assets | **Optional** | `auto` default will produce a `zip` file for Windows and `tar.gz` for others. `zip` will force the use of `zip`. `OFF` will disable packaging of assets. |
-| upload | **Optional** | Upload release or not upload. If you need to use subsequent workflow to process the file, you can choose not to upload the release. |
+| upload | **Optional** | Upload release assets or not. It'll be useful if you'd like to use subsequent workflow to process the file, such as **signing it on macos**, and so on. |
 
 ### Output Parameters
 
