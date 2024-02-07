@@ -209,7 +209,7 @@ jobs:
         goarch: [amd64]
     steps:
     - name: Set BUILD_TIME env
-      run: echo BUILD_TIME=$(date) >> ${GITHUB_ENV}
+      run: echo BUILD_TIME=$(date -u +%Y%m%dT%H%M%S) >> ${GITHUB_ENV}
     - name: Checkout
       uses: actions/checkout@v4
     - name: Run go-release-action on test code
