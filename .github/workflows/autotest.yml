@@ -225,3 +225,4 @@ jobs:
         build_flags: -v -tags v0.1-test-assets-${{ env.BUILD_TIME }}
         overwrite: true
         release_tag: v0.1-test-assets
+        multi_binaries: true
