@@ -103,6 +103,10 @@ inputs:
     description: 'Upload release assets or not'
     required: false
     default: 'TRUE'
+  multi_binaries:
+    description: 'Build and package multiple binaries together'
+    required: false
+    default: 'FALSE'
 
 outputs:
   release_asset_dir:
@@ -136,6 +140,8 @@ runs:
     - ${{ inputs.retry }}
     - ${{ inputs.post_command }}
     - ${{ inputs.compress_assets }}
+    - ${{ inputs.upload }}
+    - ${{ inputs.multi_binaries }}
 
 branding:
   icon: 'package'

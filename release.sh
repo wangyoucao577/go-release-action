@@ -95,19 +95,15 @@ else
   fi
 fi
 
-# leverage golang feature to support multiple binaries 
-# for example, 'go build -o xxx ./cmd/...' to generate multiple binaries'
-if [[ "${INPUT_PROJECT_PATH}" =~ ^\./.*/\.\.\. ]]; then
-  MULTIPLE_BINARIES=TRUE
-else
-  MULTIPLE_BINARIES=
-fi
 
 # build
 BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
-if [ ! -z ${MULTIPLE_BINARIES} ]; then
+if [ ${INPUT_MULTI_BINARIES} == "TRUE" ]; then
   RELEASE_ASSET_DIR=${BUILD_ARTIFACTS_FOLDER}
   mkdir -p ${RELEASE_ASSET_DIR}
+
+  # leverage golang feature to support multiple binaries 
+  # for example, 'go build -o xxx ./cmd/...' or 'go build -o xxx ./cmd/app1 ./cmd/app2' to generate multiple binaries'
   GOAMD64=${GOAMD64_FLAG} GOARM=${GOARM_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} ${INPUT_BUILD_FLAGS} -o ${BUILD_ARTIFACTS_FOLDER} ${INPUT_PROJECT_PATH} 
 else
   RELEASE_ASSET_DIR=${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}
@@ -140,7 +136,7 @@ fi
 if [ ! -z "${INPUT_EXTRA_FILES}" ]; then
   cd ${GITHUB_WORKSPACE}
   cp -r ${INPUT_EXTRA_FILES} ${RELEASE_ASSET_DIR}/
-  if [ -z ${MULTIPLE_BINARIES} ]; then
+  if [ ! ${INPUT_MULTI_BINARIES} == "TRUE"  ]; then
     cd ${INPUT_PROJECT_PATH}
   fi
 fi
