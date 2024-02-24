@@ -207,6 +207,7 @@ jobs:
       matrix:
         goos: [linux, windows, darwin]
         goarch: [amd64]
+        project_path: [./test/multi-binaries/..., './test/multi-binaries/cmd1 ./test/multi-binaries/cmd2']
     steps:
     - name: Set BUILD_TIME env
       run: echo BUILD_TIME=$(date -u +%Y%m%dT%H%M%S) >> ${GITHUB_ENV}
@@ -218,7 +219,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         goos: ${{ matrix.goos }}
         goarch: ${{ matrix.goarch }}
-        project_path: ./test/multi-binaries/...
+        project_path: ${{ matrix.project_path }}
         pre_command: go mod init localtest
         extra_files: LICENSE README.md
         build_flags: -v -tags v0.1-test-assets-${{ env.BUILD_TIME }}
