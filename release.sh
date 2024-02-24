@@ -98,7 +98,7 @@ fi
 
 # build
 BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
-if [ ${INPUT_MULTI_BINARIES} == "TRUE" ]; then
+if [ ${INPUT_MULTI_BINARIES^^} == 'TRUE' ]; then
   RELEASE_ASSET_DIR=${BUILD_ARTIFACTS_FOLDER}
   mkdir -p ${RELEASE_ASSET_DIR}
 
@@ -136,7 +136,7 @@ fi
 if [ ! -z "${INPUT_EXTRA_FILES}" ]; then
   cd ${GITHUB_WORKSPACE}
   cp -r ${INPUT_EXTRA_FILES} ${RELEASE_ASSET_DIR}/
-  if [ ! ${INPUT_MULTI_BINARIES} == "TRUE"  ]; then
+  if [ ! ${INPUT_MULTI_BINARIES^^} == 'TRUE'  ]; then
     cd ${INPUT_PROJECT_PATH}
   fi
 fi
