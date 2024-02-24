@@ -199,3 +199,30 @@ jobs:
         overwrite: true
         release_tag: v0.1-test-assets
         compress_assets: ${{ matrix.compress_assets }}
+
+  multi-binaries-test:
+    name: Multi Binaries Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: [amd64]
+        project_path: [./test/multi-binaries/..., './test/multi-binaries/cmd1 ./test/multi-binaries/cmd2']
+    steps:
+    - name: Set BUILD_TIME env
+      run: echo BUILD_TIME=$(date -u +%Y%m%dT%H%M%S) >> ${GITHUB_ENV}
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Run go-release-action on test code
+      uses: ./
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
+        project_path: ${{ matrix.project_path }}
+        pre_command: go mod init localtest
+        extra_files: LICENSE README.md
+        build_flags: -v -tags v0.1-test-assets-${{ env.BUILD_TIME }}
+        overwrite: true
+        release_tag: v0.1-test-assets
+        multi_binaries: true

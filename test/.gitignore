@@ -1,3 +1,5 @@
 go.mod
 go.sum
 testmain
+cmd1
+cmd2
