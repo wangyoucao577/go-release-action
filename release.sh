@@ -95,6 +95,10 @@ else
   fi
 fi
 
+if [ ${GITHUB_SERVER_URL} != 'https://github.com' ]; then
+  BASE_SERVER_URL=${GITHUB_SERVER_URL}
+fi
+
 
 # build
 BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
@@ -187,19 +191,19 @@ fi
 
 if [ ${INPUT_UPLOAD^^} == 'TRUE' ]; then
   # update binary and checksum
-  github-assets-uploader -logtostderr -f ${RELEASE_ASSET_PATH} -mediatype ${MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY} -baseurl ${GITHUB_SERVER_URL}
+  github-assets-uploader -logtostderr -f ${RELEASE_ASSET_PATH} -mediatype ${MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY} -baseurl ${BASE_SERVER_URL}
   if [ ${INPUT_MD5SUM^^} == 'TRUE' ]; then
     MD5_EXT='.md5'
     MD5_MEDIA_TYPE='text/plain'
     echo ${MD5_SUM} >${RELEASE_ASSET_PATH}${MD5_EXT}
-    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_PATH}${MD5_EXT} -mediatype ${MD5_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY} -baseurl ${GITHUB_SERVER_URL}
+    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_PATH}${MD5_EXT} -mediatype ${MD5_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY} -baseurl ${BASE_SERVER_URL}
   fi
 
   if [ ${INPUT_SHA256SUM^^} == 'TRUE' ]; then
     SHA256_EXT='.sha256'
     SHA256_MEDIA_TYPE='text/plain'
     echo ${SHA256_SUM} >${RELEASE_ASSET_PATH}${SHA256_EXT}
-    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_PATH}${SHA256_EXT} -mediatype ${SHA256_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY} -baseurl ${GITHUB_SERVER_URL}
+    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_PATH}${SHA256_EXT} -mediatype ${SHA256_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY} -baseurl ${BASE_SERVER_URL}
   fi
 fi
 
