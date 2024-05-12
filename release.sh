@@ -95,6 +95,7 @@ else
   fi
 fi
 
+
 # build
 BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
 if [ ${INPUT_MULTI_BINARIES^^} == 'TRUE' ]; then
@@ -178,17 +179,15 @@ fi
 MD5_SUM=$(md5sum ${RELEASE_ASSET_PATH} | cut -d ' ' -f 1)
 SHA256_SUM=$(sha256sum ${RELEASE_ASSET_PATH} | cut -d ' ' -f 1)
 
-# prefix upload extra params
-GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS=''
-if [ ${INPUT_OVERWRITE^^} == 'TRUE' ]; then
-  GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS="-overwrite"
-fi
-
-# base uploader command 
-BASE_UPLOADER_COMMAND="github-assets-uploader -logtostderr ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}"
+# uploader command 
+BASE_UPLOADER_COMMAND="github-assets-uploader -logtostderr -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}"
 if [ ${GITHUB_SERVER_URL} != 'https://github.com' ]; then
   BASE_UPLOADER_COMMAND="${BASE_UPLOADER_COMMAND} -baseurl ${GITHUB_SERVER_URL}"
 fi
+if [ ${INPUT_OVERWRITE^^} == 'TRUE' ]; then
+  BASE_UPLOADER_COMMAND="${BASE_UPLOADER_COMMAND} -overwrite"
+fi
+
 
 if [ ${INPUT_UPLOAD^^} == 'TRUE' ]; then
   # update binary and checksum
