@@ -95,6 +95,7 @@ else
   fi
 fi
 
+BASE_SERVER_URL=''
 if [ ${GITHUB_SERVER_URL} != 'https://github.com' ]; then
   BASE_SERVER_URL=${GITHUB_SERVER_URL}
 fi
