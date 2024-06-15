@@ -26,6 +26,9 @@ fi
 if [ ! -z "${INPUT_GOARM}" ] && [[ "${INPUT_GOARCH}" == 'arm' ]]; then
   RELEASE_ASSET_NAME=${BINARY_NAME}-${RELEASE_TAG}-${INPUT_GOOS}-${INPUT_GOARCH}v${INPUT_GOARM}
 fi
+if [ ! -z "${INPUT_GOMIPS}" ] && [[ "${INPUT_GOARCH}" -eq 'mips' || "${INPUT_GOARCH}" -eq 'mipsle' || "${INPUT_GOARCH}" -eq 'mips64' || "${INPUT_GOARCH}" -eq 'mips64le' ]]; then
+  RELEASE_ASSET_NAME=${BINARY_NAME}-${RELEASE_TAG}-${INPUT_GOOS}-${INPUT_GOARCH}-${INPUT_GOMIPS}
+fi
 if [ ! -z "${INPUT_ASSET_NAME}" ]; then
   RELEASE_ASSET_NAME=${INPUT_ASSET_NAME}
 fi
@@ -95,6 +98,22 @@ else
   fi
 fi
 
+# fulfill GOMIPS option
+if [ ! -z "${INPUT_GOMIPS}" ]; then
+  if [[ "${INPUT_GOARCH}" =~ mips ]]; then
+    GOMIPS_FLAG="${INPUT_GOMIPS}"
+  else
+    echo "GOMIPS should only be use with mips arch." >>/dev/stderr
+    GOMIPS_FLAG=""
+  fi
+else
+  if [[ "${INPUT_GOARCH}" =~ mips ]]; then
+    GOMIPS_FLAG=""
+  else
+    GOMIPS_FLAG=""
+  fi
+fi
+
 
 # build
 BUILD_ARTIFACTS_FOLDER=build-artifacts-$(date +%s)
@@ -104,20 +123,20 @@ if [ ${INPUT_MULTI_BINARIES^^} == 'TRUE' ]; then
 
   # leverage golang feature to support multiple binaries 
   # for example, 'go build -o xxx ./cmd/...' or 'go build -o xxx ./cmd/app1 ./cmd/app2' to generate multiple binaries'
-  GOAMD64=${GOAMD64_FLAG} GOARM=${GOARM_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} ${INPUT_BUILD_FLAGS} -o ${BUILD_ARTIFACTS_FOLDER} ${INPUT_PROJECT_PATH} 
+  GOAMD64=${GOAMD64_FLAG} GOARM=${GOARM_FLAG} GOMIPS=${GOMIPS_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} ${INPUT_BUILD_FLAGS} -o ${BUILD_ARTIFACTS_FOLDER} ${INPUT_PROJECT_PATH} 
 else
   RELEASE_ASSET_DIR=${INPUT_PROJECT_PATH}/${BUILD_ARTIFACTS_FOLDER}
   mkdir -p ${RELEASE_ASSET_DIR}
   cd ${INPUT_PROJECT_PATH}
   if [[ "${INPUT_BUILD_COMMAND}" =~ ^make.* ]]; then
     # start with make, assumes using make to build golang binaries, execute it directly
-    GOAMD64=${GOAMD64_FLAG} GOARM=${GOARM_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} eval ${INPUT_BUILD_COMMAND}
+    GOAMD64=${GOAMD64_FLAG} GOARM=${GOARM_FLAG} GOMIPS=${GOMIPS_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} eval ${INPUT_BUILD_COMMAND}
     if [ -f "${BINARY_NAME}${EXT}" ]; then
       # assumes the binary will be generated in current dir, copy it for later processes
       cp ${BINARY_NAME}${EXT} ${BUILD_ARTIFACTS_FOLDER}/
     fi
   else
-    GOAMD64=${GOAMD64_FLAG} GOARM=${GOARM_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} -o ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}"
+    GOAMD64=${GOAMD64_FLAG} GOARM=${GOARM_FLAG} GOMIPS=${GOMIPS_FLAG} GOOS=${INPUT_GOOS} GOARCH=${INPUT_GOARCH} ${INPUT_BUILD_COMMAND} -o ${BUILD_ARTIFACTS_FOLDER}/${BINARY_NAME}${EXT} ${INPUT_BUILD_FLAGS} ${LDFLAGS_PREFIX} "${INPUT_LDFLAGS}"
   fi
 fi
 

@@ -23,6 +23,10 @@ inputs:
     description: 'GOARM is the running programs arm microarchitecture level: ARMv5,ARMv6,ARMv7'
     required: false
     default: ''    
+  gomips:
+    description: 'GOMIPS is the running programs mips microarchitecture level: hardfloat,softfloat'
+    required: false
+    default: ''    
   goversion:
     description: 'The `Go` compiler version.'
     required: false
@@ -121,6 +125,7 @@ runs:
     - ${{ inputs.goarch }}
     - ${{ inputs.goamd64 }}
     - ${{ inputs.goarm }}    
+    - ${{ inputs.gomips }}    
     - ${{ inputs.goversion }}
     - ${{ inputs.build_flags}}
     - ${{ inputs.ldflags }}
