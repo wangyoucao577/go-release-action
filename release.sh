@@ -198,27 +198,31 @@ fi
 MD5_SUM=$(md5sum ${RELEASE_ASSET_PATH} | cut -d ' ' -f 1)
 SHA256_SUM=$(sha256sum ${RELEASE_ASSET_PATH} | cut -d ' ' -f 1)
 
-# prefix upload extra params
-GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS=''
-if [ ${INPUT_OVERWRITE^^} == 'TRUE' ]; then
-  GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS="-overwrite"
+# uploader command 
+BASE_UPLOADER_COMMAND="github-assets-uploader -logtostderr -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}"
+if [ ${GITHUB_SERVER_URL} != 'https://github.com' ]; then
+  BASE_UPLOADER_COMMAND="${BASE_UPLOADER_COMMAND} -baseurl ${GITHUB_SERVER_URL}"
 fi
+if [ ${INPUT_OVERWRITE^^} == 'TRUE' ]; then
+  BASE_UPLOADER_COMMAND="${BASE_UPLOADER_COMMAND} -overwrite"
+fi
+
 
 if [ ${INPUT_UPLOAD^^} == 'TRUE' ]; then
   # update binary and checksum
-  github-assets-uploader -logtostderr -f ${RELEASE_ASSET_PATH} -mediatype ${MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
+  ${BASE_UPLOADER_COMMAND} -f ${RELEASE_ASSET_PATH} -mediatype ${MEDIA_TYPE} 
   if [ ${INPUT_MD5SUM^^} == 'TRUE' ]; then
     MD5_EXT='.md5'
     MD5_MEDIA_TYPE='text/plain'
     echo ${MD5_SUM} >${RELEASE_ASSET_PATH}${MD5_EXT}
-    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_PATH}${MD5_EXT} -mediatype ${MD5_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
+    ${BASE_UPLOADER_COMMAND} -f ${RELEASE_ASSET_PATH}${MD5_EXT} -mediatype ${MD5_MEDIA_TYPE}
   fi
 
   if [ ${INPUT_SHA256SUM^^} == 'TRUE' ]; then
     SHA256_EXT='.sha256'
     SHA256_MEDIA_TYPE='text/plain'
     echo ${SHA256_SUM} >${RELEASE_ASSET_PATH}${SHA256_EXT}
-    github-assets-uploader -logtostderr -f ${RELEASE_ASSET_PATH}${SHA256_EXT} -mediatype ${SHA256_MEDIA_TYPE} ${GITHUB_ASSETS_UPLOADR_EXTRA_OPTIONS} -repo ${RELEASE_REPO} -token ${INPUT_GITHUB_TOKEN} -tag=${RELEASE_TAG} -releasename=${RELEASE_NAME} -retry ${INPUT_RETRY}
+    ${BASE_UPLOADER_COMMAND} -f ${RELEASE_ASSET_PATH}${SHA256_EXT} -mediatype ${SHA256_MEDIA_TYPE} 
   fi
 fi
 
