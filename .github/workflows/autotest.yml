@@ -5,7 +5,7 @@ on:
     branches-ignore:
       - '*-prebuilt'
       - 'release/**'
-    tags:        
+    tags:
       - 'v**'
     paths-ignore:
       - '**.md'
@@ -29,7 +29,7 @@ jobs:
           - goarch: arm
             goos: darwin
           - goarch: arm
-            goos: windows   
+            goos: windows
         include:
           - goos: linux
             goarch: amd64
@@ -44,10 +44,10 @@ jobs:
             goarch: amd64
             goamd64: v3
           - goos: darwin
-            goarch: amd64            
+            goarch: amd64
           - goos: linux
             goarch: arm
-            goarm: "7"            
+            goarm: "7"
     steps:
     # - name: Wait release docker build for release branches
     #   if: contains(github.ref, 'release')
@@ -70,7 +70,7 @@ jobs:
         project_path: ./test/
         binary_name: testmain
         pre_command: go mod init localtest
-        executable_compression: upx -v
+        executable_compression: upx -v --force-macos
         build_flags: -v
         ldflags: -X "main.buildTime=${{ env.BUILD_TIME }}" -X main.gitCommit=${{ github.sha }} -X main.gitRef=${{ github.ref }}
         md5sum: false
