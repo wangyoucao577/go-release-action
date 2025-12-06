@@ -1,4 +1,5 @@
-FROM debian:trixie-slim
+
+FROM debian:stable-slim
 ARG UPX_VER
 ARG UPLOADER_VER
 ENV UPX_VER=${UPX_VER:-5.0.2}
