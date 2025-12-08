@@ -160,10 +160,10 @@ fi
 cd ${BUILD_ARTIFACTS_FOLDER}
 ls -lha
 
-# INPUT_COMPRESS_ASSETS=='TRUE' is used for backwards compatability. `AUTO`, `ZIP`, `OFF` are the recommended values
-if [ ${INPUT_COMPRESS_ASSETS^^} == "TRUE" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "AUTO" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "ZIP" ]; then
+# INPUT_COMPRESS_ASSETS=='TRUE' is used for backwards compatability. `AUTO`, `ZIP`, `TAR`, `OFF` are the recommended values
+if [ ${INPUT_COMPRESS_ASSETS^^} == "TRUE" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "AUTO" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "ZIP" ] || [ ${INPUT_COMPRESS_ASSETS^^} == "TAR" ]; then
   # compress and package binary, then calculate checksum
-  if [ ${INPUT_GOOS} == 'windows' ] || [ ${INPUT_COMPRESS_ASSETS^^} == "ZIP" ]; then
+  if ([ ${INPUT_GOOS} == 'windows' ] && [ ${INPUT_COMPRESS_ASSETS^^} != "TAR" ]) || [ ${INPUT_COMPRESS_ASSETS^^} == "ZIP" ]; then
     RELEASE_ASSET_EXT='.zip'
     MEDIA_TYPE='application/zip'
     RELEASE_ASSET_FILE=${RELEASE_ASSET_NAME}${RELEASE_ASSET_EXT}
