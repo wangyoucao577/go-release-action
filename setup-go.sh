@@ -6,6 +6,8 @@ ARCH=$(dpkg --print-architecture)
 GO_LINUX_PACKAGE_URL="https://go.dev/dl/$(curl https://go.dev/VERSION?m=text | head -n1).linux-${ARCH}.tar.gz"
 if [[ "${INPUT_GOVERSION##*/}" == "go.mod" ]]; then
     INPUT_GOVERSION=$(grep -e '^go' -m 1 ${INPUT_GOVERSION} | sed -e 's/go //g')
+elif [[ "${INPUT_GOVERSION##*/}" == ".tool-versions" ]]; then
+    INPUT_GOVERSION=$(grep -e '^go' -m 1 ${INPUT_GOVERSION} | sed -E 's/go(lang)? //g')
 fi
 if [[ ${INPUT_GOVERSION} =~ ^1\.[0-9]+$ ]]; then
     LATEST_MINOR_GOVERSION=$(curl -s https://go.dev/dl/ | grep -oP "go${INPUT_GOVERSION}\.\d+" | head -n 1 | cut -c 3-)
